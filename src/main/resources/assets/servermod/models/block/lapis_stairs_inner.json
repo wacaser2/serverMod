@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "servermod:block/lapis_block",
+    "top": "servermod:block/lapis_block",
+    "side": "servermod:block/lapis_block"
+  }
+}

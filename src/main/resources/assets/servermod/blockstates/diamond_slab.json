@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "servermod:block/diamond_slab"
+    },
+    "type=top": {
+      "model": "servermod:block/diamond_slab_top"
+    },
+    "type=double": {
+      "model": "servermod:block/diamond_slab_full"
+    }
+  }
+}

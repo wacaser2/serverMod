@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "servermod:block/glass_slab"
+    },
+    "type=top": {
+      "model": "servermod:block/glass_slab_top"
+    },
+    "type=double": {
+      "model": "servermod:block/glass_slab_full"
+    }
+  }
+}

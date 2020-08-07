@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+		"pattern": [
+			"# #",
+			"   ",
+			"# #"
+		],
+		"key": {
+			"#": {
+				"item": "minecraft:emerald_block"
+			}
+		},
+		"result": {
+			"item": "servermod:emerald_note",
+			"count": 1
+		}
+	}
+}

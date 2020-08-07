@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "servermod:block/iron_slab"
+    },
+    "type=top": {
+      "model": "servermod:block/iron_slab_top"
+    },
+    "type=double": {
+      "model": "servermod:block/iron_slab_full"
+    }
+  }
+}
