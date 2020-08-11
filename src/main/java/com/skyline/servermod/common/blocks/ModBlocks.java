@@ -58,4 +58,15 @@ public class ModBlocks {
 
 	public static final Block GLOW_SLAB = new ModSlabBlock(Block.Properties.from(Blocks.GLOWSTONE))
 			.setRegistryName(ServerMod.MODID, "glow_slab");
+
+	public static final Block[] MOD_BLOCK_LIST = { SHALE, 
+			EMERALD_SLAB, EMERALD_STAIRS, 
+			COAL_SLAB, COAL_STAIRS, 
+			IRON_SLAB, IRON_STAIRS, 
+			GOLD_SLAB, GOLD_STAIRS, 
+			DIAMOND_SLAB, DIAMOND_STAIRS, 
+			LAPIS_SLAB, LAPIS_STAIRS,
+			GLOW_SLAB, GLOW_STAIRS,
+			GLASS_SLAB, GLASS_STAIRS,
+			};
 }

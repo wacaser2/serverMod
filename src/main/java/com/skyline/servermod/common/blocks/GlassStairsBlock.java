@@ -8,7 +8,7 @@ import net.minecraft.block.StairsBlock;
 public class GlassStairsBlock extends StairsBlock {
 
 	public GlassStairsBlock(Supplier<BlockState> state, Properties props) {
-		super(state, props);
+		super(state, props.notSolid());
 	}
 
 	@Override

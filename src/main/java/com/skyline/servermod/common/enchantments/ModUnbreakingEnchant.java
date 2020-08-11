@@ -1,20 +1,17 @@
 package main.java.com.skyline.servermod.common.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.enchantment.UnbreakingEnchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 
-public class ModEnchant extends Enchantment {
+public class ModUnbreakingEnchant extends UnbreakingEnchantment {
 	private int maxLvl, baseEnchant, lvlEnchant;
-	private boolean treasure;
 
-	public ModEnchant(int maxLvl, int baseEnchant, int lvlEnchant, boolean treasure, Rarity rarityIn, EnchantmentType typeIn,
+	public ModUnbreakingEnchant(int maxLvl, int baseEnchant, int lvlEnchant, Rarity rarityIn,
 			EquipmentSlotType... slots) {
-		super(rarityIn, typeIn, slots);
+		super(rarityIn, slots);
 		this.maxLvl = maxLvl;
 		this.baseEnchant = baseEnchant;
 		this.lvlEnchant = lvlEnchant;
-		this.treasure = treasure;
 	}
 
 	@Override
@@ -30,10 +27,5 @@ public class ModEnchant extends Enchantment {
 	@Override
 	public int getMaxEnchantability(int enchantLvl) {
 		return getMinEnchantability(enchantLvl) + 10;
-	}
-
-	@Override
-	public boolean isTreasureEnchantment() {
-		return treasure;
 	}
 }

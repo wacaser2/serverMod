@@ -11,7 +11,7 @@ import net.minecraft.state.properties.SlabType;
 
 public class GlassSlabBlock extends SlabBlock {
 	public GlassSlabBlock(Properties props) {
-		super(props);
+		super(props.notSolid());
 	}
 
 	@Override

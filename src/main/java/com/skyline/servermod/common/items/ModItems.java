@@ -80,4 +80,15 @@ public class ModItems {
 	public static final Item GLOW_SLAB = new BlockItem(ModBlocks.GLOW_SLAB,
 			new Item.Properties().group(ItemGroup.BUILDING_BLOCKS))
 					.setRegistryName(ModBlocks.GLOW_SLAB.getRegistryName());
+
+	public static final Item[] MOD_ITEM_LIST = { SHALE, EMERALD_NOTE, REAM, 
+			EMERALD_SLAB, EMERALD_STAIRS, 
+			COAL_SLAB, COAL_STAIRS, 
+			IRON_SLAB, IRON_STAIRS, 
+			GOLD_SLAB, GOLD_STAIRS, 
+			DIAMOND_SLAB, DIAMOND_STAIRS, 
+			LAPIS_SLAB, LAPIS_STAIRS,
+			GLOW_SLAB, GLOW_STAIRS,
+			GLASS_SLAB, GLASS_STAIRS,
+			};
 }

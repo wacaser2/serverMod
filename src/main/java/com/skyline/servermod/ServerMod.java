@@ -27,37 +27,18 @@ public class ServerMod {
 	public static class RegistryEvents {
 		@SubscribeEvent
 		public static void onBlocksRegistry(@Nonnull final RegistryEvent.Register<Block> blockRegistryEvent) {
-			blockRegistryEvent.getRegistry().registerAll(ModBlocks.SHALE
-					, ModBlocks.COAL_STAIRS, ModBlocks.COAL_SLAB
-					, ModBlocks.IRON_STAIRS, ModBlocks.IRON_SLAB
-					, ModBlocks.GOLD_STAIRS, ModBlocks.GOLD_SLAB
-					, ModBlocks.DIAMOND_STAIRS, ModBlocks.DIAMOND_SLAB
-					, ModBlocks.EMERALD_STAIRS, ModBlocks.EMERALD_SLAB
-					, ModBlocks.LAPIS_STAIRS, ModBlocks.LAPIS_SLAB
-					, ModBlocks.GLOW_STAIRS, ModBlocks.GLOW_SLAB
-//					, ModBlocks.GLASS_STAIRS, ModBlocks.GLASS_SLAB
-			);
+			blockRegistryEvent.getRegistry().registerAll(ModBlocks.MOD_BLOCK_LIST);
 		}
 
 		@SubscribeEvent
 		public static void onItemsRegistry(@Nonnull final RegistryEvent.Register<Item> itemRegistryEvent) {
-			itemRegistryEvent.getRegistry().registerAll(ModItems.SHALE, ModItems.EMERALD_NOTE, ModItems.REAM
-					, ModItems.COAL_STAIRS, ModItems.COAL_SLAB
-					, ModItems.IRON_STAIRS, ModItems.IRON_SLAB
-					, ModItems.GOLD_STAIRS, ModItems.GOLD_SLAB
-					, ModItems.DIAMOND_STAIRS, ModItems.DIAMOND_SLAB
-					, ModItems.EMERALD_STAIRS, ModItems.EMERALD_SLAB
-					, ModItems.LAPIS_STAIRS, ModItems.LAPIS_SLAB
-					, ModItems.GLOW_STAIRS, ModItems.GLOW_SLAB
-//					, ModItems.GLASS_STAIRS, ModItems.GLASS_SLAB
-			);
+			itemRegistryEvent.getRegistry().registerAll(ModItems.MOD_ITEM_LIST);
 		}
 
 		@SubscribeEvent
 		public static void registerEnchantments(
 				@Nonnull final RegistryEvent.Register<Enchantment> enchantRegistryEvent) {
-			enchantRegistryEvent.getRegistry().registerAll(ModEnchantments.BLASTING, ModEnchantments.SMELTING,
-					ModEnchantments.MOD_LOOTING, ModEnchantments.MOD_FORTUNE);
+			enchantRegistryEvent.getRegistry().registerAll(ModEnchantments.MOD_ENCHANT_LIST);
 		}
 
 		@SubscribeEvent
