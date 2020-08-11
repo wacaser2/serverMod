@@ -1,4 +1,4 @@
-package main.java.com.skyline.servermod.common.blocks;
+package com.skyline.servermod.common.blocks;
 
 import java.util.Collections;
 import java.util.List;

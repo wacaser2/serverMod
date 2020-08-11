@@ -1,6 +1,7 @@
-package main.java.com.skyline.servermod.common.enchantments;
+package com.skyline.servermod.common.enchantments;
 
-import main.java.com.skyline.servermod.ServerMod;
+import com.skyline.servermod.ServerMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;

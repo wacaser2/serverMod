@@ -1,6 +1,7 @@
-package main.java.com.skyline.servermod.common.enchantments;
+package com.skyline.servermod.common.enchantments;
 
-import main.java.com.skyline.servermod.ServerMod;
+import com.skyline.servermod.ServerMod;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.enchantment.EnchantmentType;

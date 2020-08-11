@@ -1,4 +1,4 @@
-package main.java.com.skyline.servermod.common.enchantments;
+package com.skyline.servermod.common.enchantments;
 
 import net.minecraft.enchantment.EfficiencyEnchantment;
 import net.minecraft.inventory.EquipmentSlotType;

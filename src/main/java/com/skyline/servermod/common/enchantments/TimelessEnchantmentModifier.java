@@ -1,6 +1,7 @@
-package main.java.com.skyline.servermod.common.enchantments;
+package com.skyline.servermod.common.enchantments;
 
-import main.java.com.skyline.servermod.ServerMod;
+import com.skyline.servermod.ServerMod;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

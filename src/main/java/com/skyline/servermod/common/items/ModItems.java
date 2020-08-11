@@ -1,7 +1,8 @@
-package main.java.com.skyline.servermod.common.items;
+package com.skyline.servermod.common.items;
 
-import main.java.com.skyline.servermod.ServerMod;
-import main.java.com.skyline.servermod.common.blocks.ModBlocks;
+import com.skyline.servermod.ServerMod;
+import com.skyline.servermod.common.blocks.ModBlocks;
+
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;

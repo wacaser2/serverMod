@@ -1,6 +1,7 @@
-package main.java.com.skyline.servermod.common.blocks;
+package com.skyline.servermod.common.blocks;
 
-import main.java.com.skyline.servermod.ServerMod;
+import com.skyline.servermod.ServerMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;

@@ -1,11 +1,12 @@
-package main.java.com.skyline.servermod;
+package com.skyline.servermod;
 
 import javax.annotation.Nonnull;
 
-import main.java.com.skyline.servermod.common.blocks.ModBlocks;
-import main.java.com.skyline.servermod.common.enchantments.ModEnchantments;
-import main.java.com.skyline.servermod.common.enchantments.SmeltingEnchantmentModifier;
-import main.java.com.skyline.servermod.common.items.ModItems;
+import com.skyline.servermod.common.blocks.ModBlocks;
+import com.skyline.servermod.common.enchantments.ModEnchantments;
+import com.skyline.servermod.common.enchantments.SmeltingEnchantmentModifier;
+import com.skyline.servermod.common.items.ModItems;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;

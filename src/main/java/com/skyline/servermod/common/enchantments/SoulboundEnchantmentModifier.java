@@ -1,8 +1,9 @@
-package main.java.com.skyline.servermod.common.enchantments;
+package com.skyline.servermod.common.enchantments;
 
 import java.util.Collection;
 
-import main.java.com.skyline.servermod.ServerMod;
+import com.skyline.servermod.ServerMod;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
