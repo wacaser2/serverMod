@@ -17,7 +17,7 @@ import net.minecraft.item.ItemGroup;
 public final class ModBlocks {
 	public static final List<Block> MOD_BLOCK_LIST = new ArrayList<Block>();
 	
-	public static Block register(String modid, String name, Block block) {
+	public static Block register(final String modid, final String name, final Block block) {
 		MOD_BLOCK_LIST.add(block.setRegistryName(modid, name));
 		ModItems.register(modid, name, new BlockItem(block, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 		return block;

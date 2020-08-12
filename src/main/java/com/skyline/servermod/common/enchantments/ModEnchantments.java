@@ -13,7 +13,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 public final class ModEnchantments {
 	public static List<Enchantment> MOD_ENCHANTMENT_LIST = new ArrayList<Enchantment>();
 
-	public static Enchantment register(String modid, String name, Enchantment enchantment) {
+	public static Enchantment register(final String modid, final String name, final Enchantment enchantment) {
 		MOD_ENCHANTMENT_LIST.add(enchantment.setRegistryName(modid, name));
 		return enchantment;
 	}

@@ -3,6 +3,9 @@ package com.skyline.servermod;
 import javax.annotation.Nonnull;
 
 import com.skyline.servermod.common.blocks.ModBlocks;
+import com.skyline.servermod.common.commands.FactionListCommand;
+import com.skyline.servermod.common.commands.FactionRegisterCommand;
+import com.skyline.servermod.common.commands.FactionSwitchCommand;
 import com.skyline.servermod.common.enchantments.ModEnchantments;
 import com.skyline.servermod.common.enchantments.SmeltingEnchantmentModifier;
 import com.skyline.servermod.common.items.ModItems;
@@ -11,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +25,16 @@ public class ServerMod {
 	public static final String MODID = "servermod";
 
 	public ServerMod() {
+	}
+
+	@EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+	public static class ForgeRegistryEvents {
+		@SubscribeEvent
+		public static void registerCommands(@Nonnull final RegisterCommandsEvent event) {
+			FactionRegisterCommand.register(event.getDispatcher());
+			FactionListCommand.register(event.getDispatcher());
+			FactionSwitchCommand.register(event.getDispatcher());
+		}
 	}
 
 	@EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
