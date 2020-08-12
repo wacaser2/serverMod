@@ -4,7 +4,9 @@ import com.skyline.servermod.ServerMod;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +17,26 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-public class BlastingEnchantmentModifier {
+public class BlastingEnchant extends Enchantment {
+	public BlastingEnchant() {
+		super(Enchantment.Rarity.RARE, EnchantmentType.DIGGER, ModEnchantHelper.SLOT_HAND);
+	}
+
+	@Override
+	public int getMinEnchantability(int enchantmentLevel) {
+		return 1 + 10 * (enchantmentLevel - 1);
+	}
+
+	@Override
+	public int getMaxEnchantability(int enchantmentLevel) {
+		return super.getMinEnchantability(enchantmentLevel) + 50;
+	}
+
+	@Override
+	public int getMaxLevel() {
+		return 5;
+	}
+
 	public static class EventHandler {
 		protected static final Vector3i[][] blastingBlocks = new Vector3i[][] {
 				{ new Vector3i(0, 0, 1), new Vector3i(0, 0, -1), new Vector3i(0, 1, 0), new Vector3i(0, -1, 0),

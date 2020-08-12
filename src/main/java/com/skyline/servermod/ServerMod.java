@@ -10,7 +10,6 @@ import com.skyline.servermod.common.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,26 +26,25 @@ public class ServerMod {
 	@EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class RegistryEvents {
 		@SubscribeEvent
-		public static void onBlocksRegistry(@Nonnull final RegistryEvent.Register<Block> blockRegistryEvent) {
-			blockRegistryEvent.getRegistry().registerAll(ModBlocks.MOD_BLOCK_LIST);
+		public static void registerBlocks(@Nonnull final RegistryEvent.Register<Block> event) {
+			ModBlocks.MOD_BLOCK_LIST.forEach(b -> event.getRegistry().register(b));
 		}
 
 		@SubscribeEvent
-		public static void onItemsRegistry(@Nonnull final RegistryEvent.Register<Item> itemRegistryEvent) {
-			itemRegistryEvent.getRegistry().registerAll(ModItems.MOD_ITEM_LIST);
+		public static void registerItems(@Nonnull final RegistryEvent.Register<Item> event) {
+			ModItems.MOD_ITEM_LIST.forEach(i -> event.getRegistry().register(i));
 		}
 
 		@SubscribeEvent
-		public static void registerEnchantments(
-				@Nonnull final RegistryEvent.Register<Enchantment> enchantRegistryEvent) {
-			enchantRegistryEvent.getRegistry().registerAll(ModEnchantments.MOD_ENCHANT_LIST);
+		public static void registerEnchantments(@Nonnull final RegistryEvent.Register<Enchantment> event) {
+			ModEnchantments.MOD_ENCHANTMENT_LIST.forEach(e -> event.getRegistry().register(e));
 		}
 
 		@SubscribeEvent
 		public static void registerModifierSerializers(
 				@Nonnull final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-			event.getRegistry().register(new SmeltingEnchantmentModifier.Serializer()
-					.setRegistryName(new ResourceLocation(MODID, "smelting")));
+			event.getRegistry()
+					.register(new SmeltingEnchantmentModifier.Serializer().setRegistryName(MODID, "smelting"));
 		}
 	}
 }

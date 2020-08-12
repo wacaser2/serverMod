@@ -11,8 +11,6 @@
   "block.servermod.iron_slab": "Iron Slab",
   "block.servermod.gold_stairs": "Gold Stairs",
   "block.servermod.gold_slab": "Gold Slab",
-  "block.servermod.glass_stairs": "Glass Stairs",
-  "block.servermod.glass_slab": "Glass Slab",
   "block.servermod.diamond_stairs": "Diamond Stairs",
   "block.servermod.diamond_slab": "Diamond Slab",
   "block.servermod.emerald_stairs": "Emerald Stairs",
@@ -23,5 +21,5 @@
   "block.servermod.glow_slab": "Glow Slab",
   
   "item.servermod.emerald_note": "Emerald Note",
-  "item.servermod.ream": "Ream of Paper",
+  "item.servermod.ream": "Ream of Paper"
 }
