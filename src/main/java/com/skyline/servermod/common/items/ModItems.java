@@ -10,7 +10,7 @@ import net.minecraft.item.ItemGroup;
 
 public final class ModItems {
 	public static List<Item> MOD_ITEM_LIST = new ArrayList<Item>();
-	
+
 	public static Item register(final String modid, final String name, final Item item) {
 		MOD_ITEM_LIST.add(item.setRegistryName(modid, name));
 		return item;
@@ -21,4 +21,7 @@ public final class ModItems {
 
 	public static final Item REAM = register(ServerMod.MODID, "ream",
 			new Item(new Item.Properties().group(ItemGroup.MISC)));
+
+	public static final Item HAMMER = register(ServerMod.MODID, "hammer",
+			new HammerItem(new Item.Properties().maxDamage(400).group(ItemGroup.COMBAT)));
 }

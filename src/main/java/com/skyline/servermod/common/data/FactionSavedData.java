@@ -1,0 +1,171 @@
+package com.skyline.servermod.common.data;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.skyline.servermod.ServerMod;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.world.storage.WorldSavedData;
+
+public class FactionSavedData extends WorldSavedData {
+//	private static final Logger LOGOGER = LogManager.getLogger();
+	private static final String DATA_NAME = ServerMod.MODID + "_FactionData";
+	public static final int version = 0;
+
+	public Map<String, FactionData> factions = new HashMap<String, FactionData>();
+	public Map<String, FactionPlayerData> players = new HashMap<String, FactionPlayerData>();
+
+	public static class DimLocation {
+		public static final String OVERWORLD = "overworld";
+		public static final String NETHER = "nether";
+		public static final String END = "end";
+
+		public Vector3d pos;
+		public RegistryKey<World> dim;
+
+		public DimLocation(Vector3d pos, RegistryKey<World> dim) {
+			this.pos = pos;
+			this.dim = dim;
+		}
+
+		public static DimLocation read(CompoundNBT nbt) {
+			RegistryKey<World> dim = World.field_234918_g_;
+			Vector3d pos = Vector3d.ZERO;
+			if (nbt.contains("dim")) {
+				String dimKey = nbt.getString("dim");
+				dim = dimKey == OVERWORLD ? World.field_234918_g_
+						: dimKey == NETHER ? World.field_234919_h_
+								: dimKey == END ? World.field_234920_i_ : World.field_234918_g_;
+			}
+			if (nbt.contains("pos_x") && nbt.contains("pos_y") && nbt.contains("pos_z")) {
+				pos = new Vector3d(nbt.getDouble("pos_x"), nbt.getDouble("pos_y"), nbt.getDouble("pos_z"));
+			}
+			return new DimLocation(pos, dim);
+		}
+
+		public CompoundNBT write() {
+			CompoundNBT nbt = new CompoundNBT();
+			nbt.putDouble("pos_x", pos.x);
+			nbt.putDouble("pos_y", pos.y);
+			nbt.putDouble("pos_z", pos.z);
+			nbt.putString("dim", dim == World.field_234918_g_ ? OVERWORLD
+					: dim == World.field_234919_h_ ? NETHER : dim == World.field_234920_i_ ? END : "confusion");
+			return nbt;
+		}
+	}
+
+	public static class FactionData {
+		public DimLocation origin;
+
+		public FactionData(DimLocation origin) {
+			this.origin = origin;
+		}
+
+		public static FactionData read(CompoundNBT nbt) {
+			return new FactionData(DimLocation.read(nbt));
+		}
+
+		public CompoundNBT write() {
+			return origin.write();
+		}
+	}
+
+	public static class FactionPlayerData {
+		public boolean active;
+		public DimLocation position;
+		public CompoundNBT playerData;
+
+		public FactionPlayerData(boolean active, DimLocation position, CompoundNBT playerData) {
+			this.active = active;
+			this.position = position;
+			this.playerData = playerData;
+		}
+
+		public static FactionPlayerData read(CompoundNBT nbt) {
+			boolean active = nbt.contains("active") ? nbt.getBoolean("active") : true;
+			DimLocation position = nbt.contains("position") ? DimLocation.read(nbt.getCompound("position"))
+					: new DimLocation(Vector3d.ZERO, World.field_234918_g_);
+			CompoundNBT playerData = nbt.contains("player_data") ? nbt.getCompound("player_data") : new CompoundNBT();
+			return new FactionPlayerData(active, position, playerData);
+		}
+
+		public CompoundNBT write() {
+			CompoundNBT nbt = new CompoundNBT();
+			nbt.putBoolean("active", active);
+			nbt.put("position", position.write());
+			nbt.put("player_data", playerData);
+			return nbt;
+		}
+	}
+
+	public FactionSavedData() {
+		super(DATA_NAME);
+	}
+
+	@Override
+	public void read(CompoundNBT nbt) {
+		if (nbt.contains(DATA_NAME)) {
+			CompoundNBT saveData = nbt.getCompound(DATA_NAME);
+			if (saveData.contains("version") && saveData.getInt("version") == version) {
+				ListNBT factionData = saveData.getList("factions", 10);
+				ListNBT playerData = saveData.getList("players", 10);
+
+				factionData.forEach(item -> {
+					CompoundNBT loadFaction = (CompoundNBT) item;
+					factions.put(loadFaction.getString("id"),
+							FactionData.read(loadFaction.getCompound("faction_data")));
+				});
+
+				playerData.forEach(item -> {
+					CompoundNBT loadPlayer = (CompoundNBT) item;
+					players.put(loadPlayer.getString("id"),
+							FactionPlayerData.read(loadPlayer.getCompound("player_data")));
+				});
+			}
+		}
+	}
+
+	@Override
+	public CompoundNBT write(CompoundNBT compound) {
+		CompoundNBT saveData = new CompoundNBT();
+		saveData.putInt("version", version);
+
+		ListNBT factionData = new ListNBT();
+		ListNBT playerData = new ListNBT();
+
+		factions.forEach((id, data) -> {
+			CompoundNBT saveFaction = new CompoundNBT();
+			saveFaction.putString("id", id);
+			saveFaction.put("faction_data", data.write());
+			factionData.add(saveFaction);
+		});
+
+		players.forEach((id, data) -> {
+			CompoundNBT savePlayer = new CompoundNBT();
+			savePlayer.putString("id", id);
+			savePlayer.put("player_data", data.write());
+			playerData.add(savePlayer);
+		});
+
+		saveData.put("factions", factionData);
+		saveData.put("players", playerData);
+
+		compound.put(DATA_NAME, saveData);
+		return compound;
+	}
+
+	public static FactionSavedData get(MinecraftServer server) {
+		DimensionSavedDataManager storage = server.getWorld(World.field_234918_g_).getSavedData();
+
+		FactionSavedData instance = storage.getOrCreate(() -> new FactionSavedData(), DATA_NAME);
+
+		return instance;
+	}
+}

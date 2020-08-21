@@ -3,9 +3,7 @@ package com.skyline.servermod;
 import javax.annotation.Nonnull;
 
 import com.skyline.servermod.common.blocks.ModBlocks;
-import com.skyline.servermod.common.commands.FactionListCommand;
-import com.skyline.servermod.common.commands.FactionRegisterCommand;
-import com.skyline.servermod.common.commands.FactionSwitchCommand;
+import com.skyline.servermod.common.commands.FactionCommand;
 import com.skyline.servermod.common.enchantments.ModEnchantments;
 import com.skyline.servermod.common.enchantments.SmeltingEnchantmentModifier;
 import com.skyline.servermod.common.items.ModItems;
@@ -31,9 +29,7 @@ public class ServerMod {
 	public static class ForgeRegistryEvents {
 		@SubscribeEvent
 		public static void registerCommands(@Nonnull final RegisterCommandsEvent event) {
-			FactionRegisterCommand.register(event.getDispatcher());
-			FactionListCommand.register(event.getDispatcher());
-			FactionSwitchCommand.register(event.getDispatcher());
+			FactionCommand.register(event.getDispatcher());
 		}
 	}
 
