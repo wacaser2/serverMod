@@ -86,6 +86,7 @@ public class ServerMod {
 			if (event.includeServer()) {
 				gen.addProvider(new Recipes(gen));
 				gen.addProvider(new Tags(gen));
+				gen.addProvider(new LootTables(gen));
 			}
 		}
 	}
