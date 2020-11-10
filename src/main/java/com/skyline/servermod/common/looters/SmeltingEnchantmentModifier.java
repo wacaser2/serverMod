@@ -1,4 +1,4 @@
-package com.skyline.servermod.common.enchantments;
+package com.skyline.servermod.common.looters;
 
 import java.util.ArrayList;
 import java.util.List;

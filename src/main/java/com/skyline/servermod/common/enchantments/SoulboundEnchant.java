@@ -41,29 +41,27 @@ public class SoulboundEnchant extends Enchantment {
 		return true;
 	}
 
-	public static class EventHandler {
-		@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-		public static class EventHandlers {
-			@SubscribeEvent
-			public static void onLivingDrops(final LivingDropsEvent event) {
-				if (event.getEntityLiving() instanceof PlayerEntity) {
-					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-					Collection<ItemEntity> drops = event.getDrops();
-					event.setCanceled(drops.removeIf(i -> i.getItem().isEnchanted()
-							&& EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SOULBOUND, i.getItem()) > 0
-							&& player.addItemStackToInventory(i.getItem())));
-					if (event.isCanceled()) {
-						for (ItemEntity drop : drops) {
-							ForgeHooks.onPlayerTossEvent(player, drop.getItem(), false);
-						}
+	@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+	public static class EventHandlers {
+		@SubscribeEvent
+		public static void onLivingDrops(final LivingDropsEvent event) {
+			if (event.getEntityLiving() instanceof PlayerEntity) {
+				PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+				Collection<ItemEntity> drops = event.getDrops();
+				event.setCanceled(drops.removeIf(i -> i.getItem().isEnchanted()
+						&& EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SOULBOUND.get(), i.getItem()) > 0
+						&& player.addItemStackToInventory(i.getItem())));
+				if (event.isCanceled()) {
+					for (ItemEntity drop : drops) {
+						ForgeHooks.onPlayerTossEvent(player, drop.getItem(), false);
 					}
 				}
 			}
+		}
 
-			@SubscribeEvent
-			public static void onPlayerClone(final PlayerEvent.Clone event) {
-				event.getPlayer().inventory.copyInventory(event.getOriginal().inventory);
-			}
+		@SubscribeEvent
+		public static void onPlayerClone(final PlayerEvent.Clone event) {
+			event.getPlayer().inventory.copyInventory(event.getOriginal().inventory);
 		}
 	}
 }

@@ -1,8 +1,0 @@
-{
-  "parent": "block/slab_top",
-  "textures": {
-    "bottom": "servermod:block/iron_block",
-    "top": "servermod:block/iron_block",
-    "side": "servermod:block/iron_block"
-  }
-}

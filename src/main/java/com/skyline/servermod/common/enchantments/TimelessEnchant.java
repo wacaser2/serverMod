@@ -35,16 +35,14 @@ public class TimelessEnchant extends Enchantment {
 		return true;
 	}
 
-	public static class EventHandler {
-		@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-		public static class EventHandlers {
-			@SubscribeEvent
-			public static void onItemExpire(final ItemExpireEvent event) {
-				if (event.getEntityItem().getItem().isEnchanted() && EnchantmentHelper
-						.getEnchantmentLevel(ModEnchantments.TIMELESS, event.getEntityItem().getItem()) > 0) {
-					event.getEntityItem().setNoDespawn();
-					event.setCanceled(true);
-				}
+	@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+	public static class EventHandlers {
+		@SubscribeEvent
+		public static void onItemExpire(final ItemExpireEvent event) {
+			if (event.getEntityItem().getItem().isEnchanted() && EnchantmentHelper
+					.getEnchantmentLevel(ModEnchantments.TIMELESS.get(), event.getEntityItem().getItem()) > 0) {
+				event.getEntityItem().setNoDespawn();
+				event.setCanceled(true);
 			}
 		}
 	}

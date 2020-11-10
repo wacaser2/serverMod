@@ -37,59 +37,80 @@ public class BlastingEnchant extends Enchantment {
 		return 5;
 	}
 
-	public static class EventHandler {
-		protected static final Vector3i[][] blastingBlocks = new Vector3i[][] {
-				{ new Vector3i(0, 0, 1), new Vector3i(0, 0, -1), new Vector3i(0, 1, 0), new Vector3i(0, -1, 0),
-						new Vector3i(1, 0, 0), new Vector3i(-1, 0, 0) },
-				{ new Vector3i(0, 1, 1), new Vector3i(0, 1, -1), new Vector3i(0, -1, 1), new Vector3i(0, -1, -1),
-						new Vector3i(1, 0, 1), new Vector3i(1, 0, -1), new Vector3i(-1, 0, 1), new Vector3i(-1, 0, -1),
-						new Vector3i(1, 1, 0), new Vector3i(1, -1, 0), new Vector3i(-1, 1, 0),
-						new Vector3i(-1, -1, 0) },
-				{ new Vector3i(1, 1, 1), new Vector3i(1, 1, -1), new Vector3i(1, -1, 1), new Vector3i(1, -1, -1),
-						new Vector3i(-1, 1, 1), new Vector3i(-1, 1, -1), new Vector3i(-1, -1, 1),
-						new Vector3i(-1, -1, -1) },
-				{ new Vector3i(0, 0, 2), new Vector3i(0, 1, 2), new Vector3i(0, -1, 2), new Vector3i(1, 0, 2),
-						new Vector3i(-1, 0, 2), new Vector3i(0, 0, -2), new Vector3i(0, 1, -2), new Vector3i(0, -1, -2),
-						new Vector3i(1, 0, -2), new Vector3i(-1, 0, -2), new Vector3i(0, 2, 0), new Vector3i(0, 2, 1),
-						new Vector3i(0, 2, -1), new Vector3i(1, 2, 0), new Vector3i(-1, 2, 0), new Vector3i(0, -2, 0),
-						new Vector3i(0, -2, 1), new Vector3i(0, -2, -1), new Vector3i(1, -2, 0),
-						new Vector3i(-1, -2, 0), new Vector3i(2, 0, 0), new Vector3i(2, 0, 1), new Vector3i(2, 0, -1),
-						new Vector3i(2, 1, 0), new Vector3i(2, -1, 0), new Vector3i(-2, 0, 0), new Vector3i(-2, 0, 1),
-						new Vector3i(-2, 0, -1), new Vector3i(-2, 1, 0), new Vector3i(-2, -1, 0) },
-				{ new Vector3i(1, 1, 2), new Vector3i(1, -1, 2), new Vector3i(-1, 1, 2), new Vector3i(-1, -1, 2),
-						new Vector3i(1, 1, -2), new Vector3i(1, -1, -2), new Vector3i(-1, 1, -2),
-						new Vector3i(-1, -1, -2), new Vector3i(1, 2, 1), new Vector3i(1, 2, -1), new Vector3i(-1, 2, 1),
-						new Vector3i(-1, 2, -1), new Vector3i(1, -2, 1), new Vector3i(1, -2, -1),
-						new Vector3i(-1, -2, 1), new Vector3i(-1, -2, -1), new Vector3i(2, 1, 1),
-						new Vector3i(2, 1, -1), new Vector3i(2, -1, 1), new Vector3i(2, -1, -1), new Vector3i(-2, 1, 1),
-						new Vector3i(-2, 1, -1), new Vector3i(-2, -1, 1), new Vector3i(-2, -1, -1) } };
-
-		@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-		public static class EventHandlers {
-			@SubscribeEvent
-			public static void onBreakBlock(final BreakEvent event) {
-				PlayerEntity player = event.getPlayer();
-				if (player != null) {
-					World world = (World) event.getWorld();
-					BlockState state = event.getState();
-					Block block = state.getBlock();
-					BlockPos pos = event.getPos();
-					ItemStack tool = player.getHeldItemMainhand();
-					int blastLvl;
-					if (tool.isEnchanted()
-							&& (blastLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BLASTING, tool)) > 0) {
-						if (block.canHarvestBlock(state, world, pos, player)) {
-							blastLvl = Math.min(blastLvl, blastingBlocks.length);
-							if (blastLvl > 0) {
-								for (int lvl = 0; lvl < blastLvl; lvl++) {
-									for (Vector3i offset : blastingBlocks[lvl]) {
-										BlockPos newPos = pos.add(offset);
-										Block newBlock = world.getBlockState(newPos).getBlock();
-										if (newBlock == block) {
-											newBlock.harvestBlock(world, player, newPos, world.getBlockState(newPos),
-													world.getTileEntity(newPos), tool);
-											world.destroyBlock(newPos, false, player);
-										}
+	@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+	public static class EventHandlers {
+		private static final Vector3i[][] blastingBlocks = new Vector3i[][] {
+			{ 
+				new Vector3i(0, 0, 1), new Vector3i(0, 0, -1), 
+				new Vector3i(0, 1, 0), new Vector3i(0, -1, 0),
+				new Vector3i(1, 0, 0), new Vector3i(-1, 0, 0) 
+			}, { 
+				new Vector3i(0, 1, 1), new Vector3i(0, 1, -1), 
+				new Vector3i(0, -1, 1), new Vector3i(0, -1, -1),
+				new Vector3i(1, 0, 1), new Vector3i(1, 0, -1), 
+				new Vector3i(-1, 0, 1), new Vector3i(-1, 0, -1),
+				new Vector3i(1, 1, 0), new Vector3i(1, -1, 0), 
+				new Vector3i(-1, 1, 0), new Vector3i(-1, -1, 0) 
+			}, { 
+				new Vector3i(1, 1, 1), new Vector3i(1, 1, -1), 
+				new Vector3i(1, -1, 1), new Vector3i(1, -1, -1),
+				new Vector3i(-1, 1, 1), new Vector3i(-1, 1, -1), 
+				new Vector3i(-1, -1, 1), new Vector3i(-1, -1, -1) 
+			}, { 
+				new Vector3i(0, 0, 2), new Vector3i(0, 1, 2), 
+				new Vector3i(0, -1, 2), new Vector3i(1, 0, 2),
+				new Vector3i(-1, 0, 2), new Vector3i(0, 0, -2), 
+				new Vector3i(0, 1, -2), new Vector3i(0, -1, -2),
+				new Vector3i(1, 0, -2), new Vector3i(-1, 0, -2), 
+				new Vector3i(0, 2, 0), new Vector3i(0, 2, 1),
+				new Vector3i(0, 2, -1), new Vector3i(1, 2, 0), 
+				new Vector3i(-1, 2, 0), new Vector3i(0, -2, 0),
+				new Vector3i(0, -2, 1), new Vector3i(0, -2, -1), 
+				new Vector3i(1, -2, 0), new Vector3i(-1, -2, 0), 
+				new Vector3i(2, 0, 0), new Vector3i(2, 0, 1), 
+				new Vector3i(2, 0, -1), new Vector3i(2, 1, 0), 
+				new Vector3i(2, -1, 0), new Vector3i(-2, 0, 0), 
+				new Vector3i(-2, 0, 1), new Vector3i(-2, 0, -1), 
+				new Vector3i(-2, 1, 0), new Vector3i(-2, -1, 0) 
+			}, { 
+				new Vector3i(1, 1, 2), new Vector3i(1, -1, 2), 
+				new Vector3i(-1, 1, 2), new Vector3i(-1, -1, 2),
+				new Vector3i(1, 1, -2), new Vector3i(1, -1, -2), 
+				new Vector3i(-1, 1, -2), new Vector3i(-1, -1, -2), 
+				new Vector3i(1, 2, 1), new Vector3i(1, 2, -1), 
+				new Vector3i(-1, 2, 1), new Vector3i(-1, 2, -1), 
+				new Vector3i(1, -2, 1), new Vector3i(1, -2, -1),
+				new Vector3i(-1, -2, 1), new Vector3i(-1, -2, -1), 
+				new Vector3i(2, 1, 1), new Vector3i(2, 1, -1), 
+				new Vector3i(2, -1, 1), new Vector3i(2, -1, -1), 
+				new Vector3i(-2, 1, 1), new Vector3i(-2, 1, -1), 
+				new Vector3i(-2, -1, 1), new Vector3i(-2, -1, -1) 
+			} 
+		};
+								
+		@SubscribeEvent
+		public static void onBreakBlock(final BreakEvent event) {
+			PlayerEntity player = event.getPlayer();
+			if (player != null) {
+				World world = (World) event.getWorld();
+				BlockState state = event.getState();
+				Block block = state.getBlock();
+				BlockPos pos = event.getPos();
+				ItemStack tool = player.getHeldItemMainhand();
+				int blastLvl;
+				if (tool.isEnchanted()
+						&& (blastLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BLASTING.get(), tool)) > 0) {
+					if (block.canHarvestBlock(state, world, pos, player)) {
+						blastLvl = Math.min(blastLvl, blastingBlocks.length);
+						if (blastLvl > 0) {
+							for (int lvl = 0; lvl < blastLvl; lvl++) {
+								for (Vector3i offset : blastingBlocks[lvl]) {
+									BlockPos newPos = pos.add(offset);
+									Block newBlock = world.getBlockState(newPos).getBlock();
+									if (newBlock == block) {
+										newBlock.harvestBlock(world, player, newPos, world.getBlockState(newPos),
+												world.getTileEntity(newPos), tool);
+										world.destroyBlock(newPos, false, player);
 									}
 								}
 							}

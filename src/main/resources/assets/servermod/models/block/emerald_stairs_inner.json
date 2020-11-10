@@ -1,8 +1,0 @@
-{
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "servermod:block/emerald_block",
-    "top": "servermod:block/emerald_block",
-    "side": "servermod:block/emerald_block"
-  }
-}

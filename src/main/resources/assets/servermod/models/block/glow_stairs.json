@@ -1,8 +1,0 @@
-{
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "servermod:block/glowstone",
-    "top": "servermod:block/glowstone",
-    "side": "servermod:block/glowstone"
-  }
-}

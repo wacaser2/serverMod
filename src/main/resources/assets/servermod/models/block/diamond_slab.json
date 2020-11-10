@@ -1,8 +1,0 @@
-{
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "servermod:block/diamond_block",
-    "top": "servermod:block/diamond_block",
-    "side": "servermod:block/diamond_block"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "servermod:block/glass",
-    "top": "servermod:block/glass",
-    "side": "servermod:block/glass"
-  }
-}
