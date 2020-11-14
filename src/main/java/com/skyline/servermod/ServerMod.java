@@ -1,11 +1,16 @@
 package com.skyline.servermod;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nonnull;
 
 import com.skyline.servermod.common.blocks.ModBlocks;
 import com.skyline.servermod.common.blocks.ModBlocks.BlockSet;
 import com.skyline.servermod.common.commands.FactionCommand;
-import com.skyline.servermod.common.enchantments.ModEnchantments;
+import com.skyline.servermod.common.enchantments.ModEnchants;
 import com.skyline.servermod.common.items.ModItems;
 import com.skyline.servermod.common.looters.ModLooters;
 
@@ -14,19 +19,33 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
+import net.minecraft.entity.merchant.villager.VillagerTrades.ITrade;
+import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.MerchantOffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod(ServerMod.MODID)
 public class ServerMod {
@@ -35,8 +54,8 @@ public class ServerMod {
 	public ServerMod() {
 		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		ModEnchantments.ENCHANTS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		ModEnchantments.VANILLA_ENCHANTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModEnchants.ENCHANTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModEnchants.VANILLA_ENCHANTS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModLooters.LOOTERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
@@ -61,6 +80,59 @@ public class ServerMod {
 					isDoor = tmpDoor;
 				}
 			}
+		}
+
+		@SubscribeEvent
+		public static void onVillagerTrades(@Nonnull final VillagerTradesEvent event) {
+			if (VillagerProfession.LIBRARIAN.equals(event.getType())) {
+				Map<Integer, List<ITrade>> trades = event.getTrades();
+				Random r = new Random();
+				trades.forEach((key, value) -> {
+					trades.put(key, value.stream().map(trade -> {
+						MerchantOffer offer = trade.getOffer(null, r);
+						if (offer.getSellingStack().getItem() instanceof EnchantedBookItem) {
+							return new ModBookTrade(offer.getGivenExp(), false);
+						}
+						return trade;
+					}).collect(Collectors.toList()));
+					if (key == 5) {
+						value.add(new ModBookTrade(20, true));
+					}
+				});
+			}
+		}
+	}
+
+	static class ModBookTrade implements VillagerTrades.ITrade {
+		private final int xpValue;
+		private final boolean max;
+
+		public ModBookTrade(int xpValueIn, boolean max) {
+			this.xpValue = xpValueIn;
+			this.max = max;
+		}
+
+		public MerchantOffer getOffer(Entity trader, Random rand) {
+			List<Enchantment> list = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter(Enchantment::func_230309_h_).collect(Collectors.toList());
+			Enchantment enchantment = list.get(rand.nextInt(list.size()));
+			int i = max ? enchantment.getMaxLevel() : MathHelper.nextInt(rand, enchantment.getMinLevel(), enchantment.getMaxLevel());
+			ItemStack itemstack = EnchantedBookItem.getEnchantedItemStack(new EnchantmentData(enchantment, i));
+			int j = enchantment.getMinEnchantability(i) + rand.nextInt(enchantment.getMaxEnchantability(i));
+			if (enchantment.isTreasureEnchantment()) {
+				j *= 2;
+			}
+
+			Item currency = Items.EMERALD;
+			if (j > 64) {
+				j = (j + 3) >> 2;
+				currency = Items.EMERALD_BLOCK;
+				if (j > 64) {
+					j = (j + 3) >> 2;
+					currency = ModItems.EMERALD_NOTE.get();
+				}
+			}
+
+			return new MerchantOffer(new ItemStack(currency, j), new ItemStack(Items.BOOK), itemstack, 12, this.xpValue, 0.2F);
 		}
 	}
 

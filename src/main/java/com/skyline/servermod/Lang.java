@@ -2,7 +2,7 @@ package com.skyline.servermod;
 
 import com.skyline.servermod.common.blocks.ModBlocks;
 import com.skyline.servermod.common.blocks.ModBlocks.BlockSet;
-import com.skyline.servermod.common.enchantments.ModEnchantments;
+import com.skyline.servermod.common.enchantments.ModEnchants;
 import com.skyline.servermod.common.items.ModItems;
 
 import net.minecraft.data.DataGenerator;
@@ -38,13 +38,16 @@ public class Lang extends LanguageProvider {
 
 		add(ModItems.HAMMER.get(), "Hammer");
 
-		add(ModEnchantments.BLASTING.get(), "Blasting");
-		add(ModEnchantments.SMELTING.get(), "Smelting");
-		add(ModEnchantments.SOULBOUND.get(), "Soulbound");
-		add(ModEnchantments.TIMELESS.get(), "Timeless");
-		add(ModEnchantments.THUNDER.get(), "Thunder");
-		add(ModEnchantments.TEMPEST.get(), "Tempest");
-		add(ModEnchantments.STORM.get(), "Storm");
+		add(ModEnchants.BLASTING.get(), "Blasting");
+		add(ModEnchants.SMELTING.get(), "Smelting");
+		add(ModEnchants.SOULBOUND.get(), "Soulbound");
+		add(ModEnchants.TIMELESS.get(), "Timeless");
+		add(ModEnchants.THUNDER.get(), "Thunder");
+		add(ModEnchants.TEMPEST.get(), "Tempest");
+		add(ModEnchants.STORM.get(), "Storm");
+		add(ModEnchants.COMBINE.get(), "Combine");
+		add(ModEnchants.REAPER.get(), "Reaper");
+		add(ModEnchants.TOPPLING.get(), "Toppling");
 
 		add("commands.faction.register", "Successfully registered %1$s at %2$s");
 		add("commands.faction.register.move", "Successfully moved %1$s to %2$s");

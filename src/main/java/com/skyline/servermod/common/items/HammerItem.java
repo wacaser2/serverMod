@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
-import com.skyline.servermod.common.enchantments.ModEnchantments;
+import com.skyline.servermod.common.enchantments.ModEnchants;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -56,9 +56,9 @@ public class HammerItem extends Item implements IVanishable {
 	private final Multimap<Attribute, AttributeModifier> attributes;
 
 	private int duration = 0;
-	boolean th = false;
-	boolean rh = false;
-	boolean rn = false;
+	private boolean th = false;
+	private boolean rh = false;
+	private boolean pn = false;
 
 	public HammerItem(Properties properties) {
 		super(properties);
@@ -95,7 +95,7 @@ public class HammerItem extends Item implements IVanishable {
 	}
 
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if ((double) state.getBlockHardness(worldIn, pos) != 0.0D) {
+		if (!Material.GLASS.equals(state.getMaterial()) || (double) state.getBlockHardness(worldIn, pos) != 0.0D) {
 			stack.damageItem(2, entityLiving, (wielder) -> {
 				wielder.sendBreakAnimation(EquipmentSlotType.MAINHAND);
 			});
@@ -106,16 +106,7 @@ public class HammerItem extends Item implements IVanishable {
 	public int getItemEnchantability() { return 1; }
 
 	public UseAction getUseAction(ItemStack stack) {
-		if (canThunder(stack)) {
-			if (isCharged(stack)) {
-				return UseAction.SPEAR;
-			} else if (th && rn && duration < getChargeTime(stack)) { return UseAction.BOW; }
-		}
-		if (canTempest(stack)) { return UseAction.SPEAR; }
-		if (!th && canStorm(stack)) {
-			if (duration < getStormTime(stack)) { return UseAction.CROSSBOW; }
-		}
-		return UseAction.NONE;
+		return isCharged(stack) ? UseAction.SPEAR : canThunder(stack) && duration < getChargeTime(stack) ? UseAction.BOW : canTempest(stack) ? UseAction.SPEAR : canStorm(stack) && duration < getStormTime(stack) ? UseAction.CROSSBOW : UseAction.NONE;
 	}
 
 	public int getUseDuration(ItemStack stack) {
@@ -131,36 +122,17 @@ public class HammerItem extends Item implements IVanishable {
 		if (!worldIn.isRemote()) {
 			th = worldIn.isThundering();
 			rh = worldIn.isRaining();
-			rn = worldIn.isRainingAt(new BlockPos(playerIn.getPositionVec()));
+			pn = worldIn.canBlockSeeSky(new BlockPos(playerIn.getPositionVec()));
 
-			if (canThunder(stack)) {
-				if (isCharged(stack)) {
-					playerIn.setActiveHand(handIn);
-					return ActionResult.resultConsume(stack);
-				} else if (th && rn) {
-					playerIn.setActiveHand(handIn);
-					return ActionResult.resultConsume(stack);
-				}
-			}
-			if (canTempest(stack)) {
-				int tp = tempestPower(stack);
-				if (rn && (th || tp > 1) || tp > 2) {
-					playerIn.setActiveHand(handIn);
-					return ActionResult.resultConsume(stack);
-				}
-			}
-			if (canStorm(stack)) {
-				int sp = stormPower(stack);
-				if (!th && (rh || sp > 1)) {
-					playerIn.setActiveHand(handIn);
-					return ActionResult.resultConsume(stack);
-				}
+			if (isCharged(stack) || canThunder(stack) || canTempest(stack) || canStorm(stack)) {
+				playerIn.setActiveHand(handIn);
+				return ActionResult.resultConsume(stack);
 			}
 		}
 		return ActionResult.resultFail(stack);
 	}
 
-	private static Vector3d motionVec(int tp, int spd, Vector3d vec) {
+	private static Vector3d getTempestMotion(int spd, Vector3d vec) {
 		double vel = spd * .01F;
 		Vector3d m = vec.scale(vel).add(new Vector3d(0, .082F, 0));
 		return m;
@@ -169,39 +141,36 @@ public class HammerItem extends Item implements IVanishable {
 	public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
 		duration = getUseDuration(stack) - count;
 		if (canTempest(stack)) {
-			int tp = tempestPower(stack);
-			int spd = tp - (th ? 0 : rn ? 1 : 2);
+			int spd = tempestPower(stack) - (th ? 0 : pn ? 1 : 2);
 			if (spd > 0) {
-				Vector3d m = motionVec(tp, spd, livingEntityIn.getLookVec());
+				Vector3d m = getTempestMotion(spd, livingEntityIn.getLookVec());
 				livingEntityIn.setMotion(livingEntityIn.getMotion().add(m.getX(), m.getY(), m.getZ()));
 			}
 		}
 		if (!worldIn.isRemote()) {
-			if (canThunder(stack) && th && rn && !isCharged(stack) && duration == getChargeTime(stack)) {
+			if (canThunder(stack) && !isCharged(stack) && duration == getChargeTime(stack)) {
 				lightningStrike(worldIn, livingEntityIn, livingEntityIn.getPositionVec(), true);
 			}
 			if (canStorm(stack) && worldIn instanceof ServerWorld) {
 				int sp = stormPower(stack);
 				ServerWorld sw = (ServerWorld) worldIn;
-				if (!th) {
-					if (sp > 1) {
-						if (rh) {
-							if (duration == getStormTime(stack) / 2) {
-								setStorm(sw, true);
-							}
-						} else {
-							if (duration == getStormTime(stack) / 2) {
-								setStorm(sw, false);
-							} else if (duration == getStormTime(stack)) {
-								setStorm(sw, true);
-							}
+				if (sp > 1) {
+					if (rh) {
+						if (duration == getStormTime(stack) / 2) {
+							setStorm(sw, stack, true);
 						}
 					} else {
-						if (rh) {
-							if (duration == getStormTime(stack)) {
-								setStorm(sw, false);
+						if (duration == getStormTime(stack) / 2) {
+							setStorm(sw, stack, false);
+						} else if (duration == getStormTime(stack)) {
+							setStorm(sw, stack, true);
+						}
+					}
+				} else {
+					if (rh) {
+						if (duration == getStormTime(stack)) {
+							setStorm(sw, stack, false);
 
-							}
 						}
 					}
 				}
@@ -214,40 +183,40 @@ public class HammerItem extends Item implements IVanishable {
 			duration = getUseDuration(stack) - timeLeft;
 			if (isCharged(stack)) {
 				shootLightning(worldIn, entityLiving, entityLiving.getActiveHand(), stack);
-			} else if (canThunder(stack) && th && rn && duration >= getChargeTime(stack)) {
+			} else if (canThunder(stack) && duration >= getChargeTime(stack)) {
 				setCharged(stack, true);
 			}
 			if (canTempest(stack)) {
 				int tp = tempestPower(stack);
-				entityLiving.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 20 * tp, tp, false, false));
+				entityLiving.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, Math.min(duration, 20 * tp), tp, false, false));
 			}
 
 			duration = 0;
 		}
 	}
 
-	private static boolean canThunder(ItemStack stack) {
-		return thunderPower(stack) > 0;
+	private boolean canThunder(ItemStack stack) {
+		return thunderPower(stack) > 0 && th && pn;
 	}
 
-	private static boolean canTempest(ItemStack stack) {
-		return tempestPower(stack) > 0;
+	private boolean canTempest(ItemStack stack) {
+		return pn && tempestPower(stack) > (th ? 0 : rh ? 1 : 2);
 	}
 
-	private static boolean canStorm(ItemStack stack) {
-		return stormPower(stack) > 0;
+	private boolean canStorm(ItemStack stack) {
+		return !th && pn && stormPower(stack) > (rh ? 0 : 1);
 	}
 
 	private static int thunderPower(ItemStack stack) {
-		return EnchantmentHelper.getEnchantmentLevel(ModEnchantments.THUNDER.get(), stack);
+		return EnchantmentHelper.getEnchantmentLevel(ModEnchants.THUNDER.get(), stack);
 	}
 
 	private static int tempestPower(ItemStack stack) {
-		return EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TEMPEST.get(), stack);
+		return EnchantmentHelper.getEnchantmentLevel(ModEnchants.TEMPEST.get(), stack);
 	}
 
 	private static int stormPower(ItemStack stack) {
-		return EnchantmentHelper.getEnchantmentLevel(ModEnchantments.STORM.get(), stack);
+		return EnchantmentHelper.getEnchantmentLevel(ModEnchants.STORM.get(), stack);
 	}
 
 	public static boolean isCharged(ItemStack stack) {
@@ -268,8 +237,11 @@ public class HammerItem extends Item implements IVanishable {
 		return 200;
 	}
 
-	public void setStorm(ServerWorld world, boolean thunder) {
+	public void setStorm(ServerWorld world, ItemStack stack, boolean thunder) {
 		world.func_241113_a_(0, 1000, true, thunder);
+		if (!canThunder(stack)) {
+			duration = 0;
+		}
 		th = thunder;
 		rh = true;
 	}
@@ -285,7 +257,7 @@ public class HammerItem extends Item implements IVanishable {
 			float f5 = MathHelper.sin(-f * ((float) Math.PI / 180F));
 			float f6 = f3 * f4;
 			float f7 = f2 * f4;
-			double d0 = 10 * EnchantmentHelper.getEnchantmentLevel(ModEnchantments.THUNDER.get(), stack);
+			double d0 = 10 * EnchantmentHelper.getEnchantmentLevel(ModEnchants.THUNDER.get(), stack);
 			Vector3d vector3d1 = vector3d.add((double) f6 * d0, (double) f5 * d0, (double) f7 * d0);
 			BlockRayTraceResult result = worldIn.rayTraceBlocks(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, FluidMode.ANY, shooter));
 

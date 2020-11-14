@@ -1,0 +1,18 @@
+{
+  "type": "servermod:combine",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "enchantments": [
+          {
+            "enchantment": "servermod:combine",
+            "levels": {
+              "min": 1
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

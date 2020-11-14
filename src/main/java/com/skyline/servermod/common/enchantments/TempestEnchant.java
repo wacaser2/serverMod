@@ -1,13 +1,10 @@
 package com.skyline.servermod.common.enchantments;
 
-import com.skyline.servermod.common.items.HammerItem;
-
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
 
 public class TempestEnchant extends Enchantment {
 	public TempestEnchant() {
-		super(Enchantment.Rarity.VERY_RARE, EnchantmentType.create("HAMMER", i -> i instanceof HammerItem), ModEnchantHelper.SLOT_ALL);
+		super(Enchantment.Rarity.RARE, ModEnchantHelper.HAMMER, ModEnchantHelper.SLOT_HAND);
 	}
 
 	@Override
@@ -24,5 +21,9 @@ public class TempestEnchant extends Enchantment {
 	public int getMaxLevel() { return 3; }
 
 	@Override
-	public boolean isTreasureEnchantment() { return true; }
+	public boolean isTreasureEnchantment() { return false; }
+
+	public boolean func_230309_h_() {
+		return false;
+	}
 }

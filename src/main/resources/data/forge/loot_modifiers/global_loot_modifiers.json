@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "servermod:smelting"
+    "servermod:smelting",
+    "servermod:combine"
   ]
 }

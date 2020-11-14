@@ -2,9 +2,9 @@ package com.skyline.servermod.common.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 
-public class ThunderEnchant extends Enchantment {
-	public ThunderEnchant() {
-		super(Enchantment.Rarity.VERY_RARE, ModEnchantHelper.HAMMER, ModEnchantHelper.SLOT_HAND);
+public class CombineEnchant extends Enchantment {
+	public CombineEnchant() {
+		super(Enchantment.Rarity.VERY_RARE, ModEnchantHelper.HOE, ModEnchantHelper.SLOT_HAND);
 	}
 
 	@Override
@@ -18,8 +18,8 @@ public class ThunderEnchant extends Enchantment {
 	}
 
 	@Override
-	public int getMaxLevel() { return 5; }
+	public int getMaxLevel() { return 1; }
 
 	@Override
-	public boolean isTreasureEnchantment() { return true; }
+	public boolean isTreasureEnchantment() { return false; }
 }

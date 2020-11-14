@@ -40,7 +40,7 @@ public class TimelessEnchant extends Enchantment {
 		@SubscribeEvent
 		public static void onItemExpire(final ItemExpireEvent event) {
 			if (event.getEntityItem().getItem().isEnchanted() && EnchantmentHelper
-					.getEnchantmentLevel(ModEnchantments.TIMELESS.get(), event.getEntityItem().getItem()) > 0) {
+					.getEnchantmentLevel(ModEnchants.TIMELESS.get(), event.getEntityItem().getItem()) > 0) {
 				event.getEntityItem().setNoDespawn();
 				event.setCanceled(true);
 			}

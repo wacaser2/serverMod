@@ -1,13 +1,10 @@
 package com.skyline.servermod.common.enchantments;
 
-import com.skyline.servermod.common.items.HammerItem;
-
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
 
 public class StormEnchant extends Enchantment {
 	public StormEnchant() {
-		super(Enchantment.Rarity.VERY_RARE, EnchantmentType.create("HAMMER", i -> i instanceof HammerItem), ModEnchantHelper.SLOT_ALL);
+		super(Enchantment.Rarity.VERY_RARE, ModEnchantHelper.HAMMER, ModEnchantHelper.SLOT_HAND);
 	}
 
 	@Override
@@ -25,4 +22,8 @@ public class StormEnchant extends Enchantment {
 
 	@Override
 	public boolean isTreasureEnchantment() { return true; }
+
+	public boolean func_230309_h_() {
+		return false;
+	}
 }

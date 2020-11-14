@@ -23,13 +23,11 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class SmeltingEnchantmentModifier extends LootModifier {
+public class SmeltingEnchantLooter extends LootModifier {
 	public Random rando;
 
-	public SmeltingEnchantmentModifier(ILootCondition[] conditionsIn) {
+	public SmeltingEnchantLooter(ILootCondition[] conditionsIn) {
 		super(conditionsIn);
-
-		rando = new Random();
 	}
 
 	@Nonnull
@@ -41,9 +39,9 @@ public class SmeltingEnchantmentModifier extends LootModifier {
 			if (orig.getItem() instanceof BlockItem && !(smelted.getItem() instanceof BlockItem)) {
 				ItemStack tool = context.get(LootParameters.TOOL);
 				int fortuneLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
-				int fortuneMultiplier = Math.max(1, rando.nextInt(fortuneLvl + 2));
+				int fortuneMultiplier = Math.max(1, context.getRandom().nextInt(fortuneLvl + 2));
 				ret.add(ItemHandlerHelper.copyStackWithSize(smelted, fortuneMultiplier * smelted.getCount()));
-			}else {
+			} else {
 				ret.add(smelted);
 			}
 		}
@@ -51,18 +49,13 @@ public class SmeltingEnchantmentModifier extends LootModifier {
 	}
 
 	private static ItemStack smelt(ItemStack stack, LootContext context) {
-		return context.getWorld().getRecipeManager()
-				.getRecipe(IRecipeType.SMELTING, new Inventory(stack), context.getWorld())
-				.map(FurnaceRecipe::getRecipeOutput).filter(itemStack -> !itemStack.isEmpty())
-				.map(itemStack -> ItemHandlerHelper.copyStackWithSize(itemStack,
-						stack.getCount() * itemStack.getCount()))
-				.orElse(stack);
+		return context.getWorld().getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(stack), context.getWorld()).map(FurnaceRecipe::getRecipeOutput).filter(itemStack -> !itemStack.isEmpty()).map(itemStack -> ItemHandlerHelper.copyStackWithSize(itemStack, stack.getCount() * itemStack.getCount())).orElse(stack);
 	}
 
-	public static class Serializer extends GlobalLootModifierSerializer<SmeltingEnchantmentModifier> {
+	public static class Serializer extends GlobalLootModifierSerializer<SmeltingEnchantLooter> {
 		@Override
-		public SmeltingEnchantmentModifier read(ResourceLocation name, JsonObject json, ILootCondition[] conditionsIn) {
-			return new SmeltingEnchantmentModifier(conditionsIn);
+		public SmeltingEnchantLooter read(ResourceLocation name, JsonObject json, ILootCondition[] conditionsIn) {
+			return new SmeltingEnchantLooter(conditionsIn);
 		}
 	}
 }
