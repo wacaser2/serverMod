@@ -103,6 +103,8 @@ public class Recipes extends RecipeProvider implements IConditionBuilder {
 		registerVanillaRecipe(consumer, BiRecipe.build(Items.DIAMOND, Blocks.DIAMOND_BLOCK, Pattern.INGOT, Pattern.BLOCK));
 		registerVanillaRecipe(consumer, BiRecipe.build(Items.EMERALD, Blocks.EMERALD_BLOCK, Pattern.INGOT, Pattern.BLOCK));
 		registerVanillaRecipe(consumer, BiRecipe.build(Items.LAPIS_LAZULI, Blocks.LAPIS_BLOCK, Pattern.INGOT, Pattern.BLOCK));
+		registerVanillaRecipe(consumer, BiRecipe.build(Items.REDSTONE, Blocks.REDSTONE_BLOCK, Pattern.INGOT, Pattern.BLOCK));
+		registerVanillaRecipe(consumer, BiRecipe.build(Items.SLIME_BALL, Blocks.SLIME_BLOCK, Pattern.INGOT, Pattern.BLOCK));
 
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Blocks.ICE, Items.PACKED_ICE, Pattern.BLOCK, 1));
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Blocks.PACKED_ICE, Items.BLUE_ICE, Pattern.BLOCK, 1));
@@ -130,11 +132,16 @@ public class Recipes extends RecipeProvider implements IConditionBuilder {
 
 		registerRecipe(consumer, SimpleRecipe.build(Items.NETHER_WART_BLOCK, Items.NETHER_WART, Pattern.INGOT, 4));
 
-		// misc
-
+		// wood
 		registerVanillaRecipe(consumer, SimpleRecipe.build(ItemTags.PLANKS, Items.STICK, Pattern.WALL, 8, "planks"));
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Items.OAK_LOG, Items.OAK_PLANKS, Pattern.INGOT, 4));
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Items.OAK_LOG, Items.OAK_WOOD, Pattern.BLOCK, 1));
+
+		registerRecipe(consumer, SimpleRecipe.build(Items.OAK_WOOD, Items.OAK_LOG, Pattern.INGOT, 4));
+		registerRecipe(consumer, SimpleRecipe.build(Items.OAK_PLANKS, Items.OAK_LOG, Pattern.BLOCK, 1));
+		registerRecipe(consumer, SimpleRecipe.build(Items.STICK, Items.OAK_PLANKS, Pattern.BLOCK, 1));
+
+		// misc
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Items.BONE, Items.BONE_MEAL, Pattern.INGOT, 4));
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Items.BONE, Items.BONE_BLOCK, Pattern.BLOCK, 1));
 		registerVanillaRecipe(consumer, SimpleRecipe.build(Items.GUNPOWDER, Items.TNT, Pattern.BLOCK, 1));
@@ -142,9 +149,6 @@ public class Recipes extends RecipeProvider implements IConditionBuilder {
 
 		registerRecipe(consumer, SimpleRecipe.build(Items.BONE_BLOCK, Items.BONE, Pattern.INGOT, 4), mcLoc("bone_meal_from_bone_block"));
 
-		registerRecipe(consumer, SimpleRecipe.build(Items.OAK_WOOD, Items.OAK_LOG, Pattern.INGOT, 4));
-		registerRecipe(consumer, SimpleRecipe.build(Items.OAK_PLANKS, Items.OAK_LOG, Pattern.BLOCK, 1));
-		registerRecipe(consumer, SimpleRecipe.build(Items.STICK, Items.OAK_PLANKS, Pattern.BLOCK, 1));
 		registerRecipe(consumer, SimpleRecipe.build(Items.BONE_MEAL, Items.BONE, Pattern.BLOCK, 1));
 		registerRecipe(consumer, SimpleRecipe.build(Items.LEATHER, Items.RABBIT_HIDE, Pattern.INGOT, 4));
 		registerRecipe(consumer, SimpleRecipe.build(Items.TNT, Items.GUNPOWDER, Pattern.INGOT, 4));
@@ -174,6 +178,7 @@ public class Recipes extends RecipeProvider implements IConditionBuilder {
 		registerRecipe(consumer, BiRecipe.build(Items.YELLOW_DYE, Blocks.YELLOW_CONCRETE_POWDER, Pattern.INGOT, Pattern.BLOCK));
 
 		ShapedRecipeBuilder.shapedRecipe(Items.CRAFTING_TABLE, 1).patternLine("XX").patternLine("SS").key('X', ItemTags.PLANKS).key('S', Items.STICK).setGroup("crafting_table").addCriterion("has_" + "planks", hasItem(ItemTags.PLANKS)).addCriterion("has_" + "sticks", hasItem(Items.STICK)).build(consumer, mcLoc("crafting_table"));
+		ShapedRecipeBuilder.shapedRecipe(ModItems.HAMMER.get(), 1).patternLine("XSX").patternLine(" S ").patternLine(" S ").key('X', Items.IRON_INGOT).key('S', Items.STICK).setGroup("hammer").addCriterion("has_" + "iron", hasItem(Items.IRON_INGOT)).addCriterion("has_" + "sticks", hasItem(Items.STICK)).build(consumer, modLoc("hammer"));
 	}
 
 	private ResourceLocation mcLoc(String path) {

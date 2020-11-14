@@ -42,6 +42,9 @@ public class Lang extends LanguageProvider {
 		add(ModEnchantments.SMELTING.get(), "Smelting");
 		add(ModEnchantments.SOULBOUND.get(), "Soulbound");
 		add(ModEnchantments.TIMELESS.get(), "Timeless");
+		add(ModEnchantments.THUNDER.get(), "Thunder");
+		add(ModEnchantments.TEMPEST.get(), "Tempest");
+		add(ModEnchantments.STORM.get(), "Storm");
 
 		add("commands.faction.register", "Successfully registered %1$s at %2$s");
 		add("commands.faction.register.move", "Successfully moved %1$s to %2$s");

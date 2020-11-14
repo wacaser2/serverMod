@@ -17,7 +17,6 @@ public class ItemModels extends ItemModelProvider {
 		@Override
 		protected void registerModels() {
 			addItem(ModItems.EMERALD_NOTE);
-			addItem(ModItems.HAMMER);
 			addItem(ModItems.REAM);
 
 			addItem(ModItems.CARROT_BUSHEL);

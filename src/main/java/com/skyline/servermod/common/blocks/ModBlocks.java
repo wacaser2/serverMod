@@ -72,6 +72,8 @@ public final class ModBlocks {
 	public static final BlockSet NETHERITE_SET = registerBlockSet(Blocks.field_235397_ng_, Items.field_234759_km_, false);
 	public static final BlockSet EMERALD_SET = registerBlockSet(Blocks.EMERALD_BLOCK, Items.EMERALD, false);
 	public static final BlockSet LAPIS_SET = registerBlockSet(Blocks.LAPIS_BLOCK, Items.LAPIS_LAZULI, false);
+//	public static final BlockSet REDSTONE_SET = registerBlockSet(Blocks.REDSTONE_BLOCK, Items.REDSTONE, false);
+//	public static final BlockSet SLIME_SET = registerBlockSet(Blocks.SLIME_BLOCK, Items.SLIME_BALL, true);
 	public static final BlockSet GLOW_SET = registerBlockSet(Blocks.GLOWSTONE, Items.GLOWSTONE_DUST, true);
 	public static final BlockSet ICE_SET = registerBlockSet(Blocks.ICE, null, true);
 	public static final BlockSet PACKED_ICE_SET = registerBlockSet(Blocks.PACKED_ICE, Items.ICE, false);
@@ -94,10 +96,4 @@ public final class ModBlocks {
 	public static final BlockSet RED_STAINED_GLASS_SET = registerBlockSet(Blocks.RED_STAINED_GLASS, null, false);
 	public static final BlockSet WHITE_STAINED_GLASS_SET = registerBlockSet(Blocks.WHITE_STAINED_GLASS, null, false);
 	public static final BlockSet YELLOW_STAINED_GLASS_SET = registerBlockSet(Blocks.YELLOW_STAINED_GLASS, null, false);
-
-//	public static final Block GLASS_STAIRS = register("glass_stairs",
-//			new GlassStairsBlock(() -> Blocks.GLASS.getDefaultState(), Block.Properties.from(Blocks.GLASS)));
-//
-//	public static final Block GLASS_SLAB = register("glass_slab",
-//			new GlassSlabBlock(Block.Properties.from(Blocks.GLASS)));
 }
