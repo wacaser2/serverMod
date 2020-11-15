@@ -34,6 +34,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -70,6 +72,7 @@ public class ServerMod {
 		}
 
 		@SubscribeEvent
+		@OnlyIn(Dist.CLIENT)
 		public static void onPlayerTick(@Nonnull final PlayerTickEvent event) {
 			if (event.player instanceof ClientPlayerEntity) {
 				if (event.player.getGameProfile().getName().equalsIgnoreCase("WaffleFries")) {

@@ -10,6 +10,7 @@ import com.skyline.servermod.common.items.ModItems;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
@@ -44,7 +45,7 @@ public final class ModBlocks {
 
 			List<RegistryObject<Block>> blockSet = new ArrayList<RegistryObject<Block>>();
 			blockSet.add(register(baseName + "_stairs", () -> new StairsBlock(() -> base.getDefaultState(), props)));
-			blockSet.add(register(baseName + "_slab", () -> new ModSlabBlock(props)));
+			blockSet.add(register(baseName + "_slab", () -> new SlabBlock(props)));
 			blockSet.add(register(baseName + "_wall", () -> new WallBlock(props)));
 			
 			return blockSet;
