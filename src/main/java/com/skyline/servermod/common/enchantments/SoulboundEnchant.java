@@ -32,13 +32,13 @@ public class SoulboundEnchant extends Enchantment {
 	}
 
 	@Override
-	public int getMaxLevel() {
-		return 1;
-	}
+	public int getMaxLevel() { return 1; }
 
 	@Override
-	public boolean isTreasureEnchantment() {
-		return true;
+	public boolean isTreasureEnchantment() { return true; }
+
+	public boolean func_230309_h_() {
+		return false;
 	}
 
 	@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -48,9 +48,7 @@ public class SoulboundEnchant extends Enchantment {
 			if (event.getEntityLiving() instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 				Collection<ItemEntity> drops = event.getDrops();
-				event.setCanceled(drops.removeIf(i -> i.getItem().isEnchanted()
-						&& EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SOULBOUND.get(), i.getItem()) > 0
-						&& player.addItemStackToInventory(i.getItem())));
+				event.setCanceled(drops.removeIf(i -> i.getItem().isEnchanted() && EnchantmentHelper.getEnchantmentLevel(ModEnchants.SOULBOUND.get(), i.getItem()) > 0 && player.addItemStackToInventory(i.getItem())));
 				if (event.isCanceled()) {
 					for (ItemEntity drop : drops) {
 						ForgeHooks.onPlayerTossEvent(player, drop.getItem(), false);

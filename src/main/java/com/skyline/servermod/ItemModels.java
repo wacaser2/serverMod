@@ -17,8 +17,20 @@ public class ItemModels extends ItemModelProvider {
 		@Override
 		protected void registerModels() {
 			addItem(ModItems.EMERALD_NOTE);
-			addItem(ModItems.HAMMER);
 			addItem(ModItems.REAM);
+
+			addItem(ModItems.CARROT_BUSHEL);
+			addItem(ModItems.POTATO_BUSHEL);
+			addItem(ModItems.BEETROOT_BUSHEL);
+			addItem(ModItems.BEETROOT_SEEDS_FEEDBAG);
+			addItem(ModItems.MELON_SEEDS_FEEDBAG);
+			addItem(ModItems.PUMPKIN_SEEDS_FEEDBAG);
+			addItem(ModItems.WHEAT_SEEDS_FEEDBAG);
+			addItem(ModItems.QUIVER);
+			addItem(ModItems.CARTON);
+			addItem(ModItems.PILLOW);
+
+			getBuilder("ruby").parent(new UncheckedModelFile("item/generated")).texture("layer0", mcLoc("item/ruby"));
 		}
 		
 		private void addItem(RegistryObject<Item> item) {

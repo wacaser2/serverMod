@@ -22,5 +22,16 @@ eclipse
 run
 .vscode/launch.json
 
+# generated
+src/generated
+src/main/resources/assets/servermod/blockstates
+src/main/resources/assets/servermod/lang
+src/main/resources/assets/servermod/models
+src/main/resources/data/minecraft/
+src/main/resources/data/servermod/recipes
+src/main/resources/data/servermod/loot_tables/blocks
+src/main/resources/data/servermod/advancements
+src/main/resources/.cache
+
 # Files from Forge MDK
 forge*changelog.txt
