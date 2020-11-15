@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 
 import com.skyline.servermod.common.blocks.ModBlocks;
 import com.skyline.servermod.common.blocks.ModBlocks.BlockSet;
+import com.skyline.servermod.common.commands.FactionArgument;
 import com.skyline.servermod.common.commands.FactionCommand;
 import com.skyline.servermod.common.enchantments.ModEnchants;
 import com.skyline.servermod.common.items.ModItems;
@@ -18,6 +19,7 @@ import net.minecraft.block.DoorBlock;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
@@ -45,6 +47,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -140,8 +143,12 @@ public class ServerMod {
 	}
 
 	@Mod.EventBusSubscriber(bus = Bus.MOD)
-	public static class DataGenerationEvents {
-
+	public static class ModSetupEvents {
+		@SubscribeEvent
+		public static void registerArgumentTypes(FMLCommonSetupEvent event) {
+			ArgumentTypes.register("servermod:faction", FactionArgument.class, new FactionArgument.Serializer());
+		}
+		 
 		@SubscribeEvent
 		public static void onRenderTypeSetup(FMLClientSetupEvent event) {
 			setupBlockSetRenderType(ModBlocks.GLASS_SET, RenderType.getCutoutMipped());

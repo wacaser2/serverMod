@@ -172,7 +172,7 @@ public class FactionSavedData extends WorldSavedData {
 			CompoundNBT loadPlayer = (CompoundNBT) item;
 			String factionKey = loadPlayer.getString("id");
 			String[] fKeySplit = factionKey.split(":");
-			factions.get(fKeySplit[0]).players.put(fKeySplit[1], FactionPlayerData.read(loadPlayer.getCompound("player_data")));
+			factions.get(FactionData.formatID(fKeySplit[0])).players.put(fKeySplit[1], FactionPlayerData.read(loadPlayer.getCompound("player_data")));
 		});
 	}
 	

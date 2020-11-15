@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -16,11 +17,15 @@ import com.skyline.servermod.common.data.FactionSavedData;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.command.arguments.IArgumentSerializer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class FactionArgument implements ArgumentType<String> {
 	private static final Collection<String> EXAMPLES = Arrays.asList("factionA", "\"faction B\"", "Other Faction");
-	public static final SimpleCommandExceptionType GENERIC = new SimpleCommandExceptionType(new TranslationTextComponent("argument.faction.invalid"));
+	public static final SimpleCommandExceptionType GENERIC = new SimpleCommandExceptionType(
+			new TranslationTextComponent("argument.faction.invalid"));
 	private FactionType type;
 
 	protected FactionArgument(FactionType type) {
@@ -38,7 +43,7 @@ public class FactionArgument implements ArgumentType<String> {
 	public static FactionArgument hidden() {
 		return new FactionArgument(FactionType.HIDDEN);
 	}
-	
+
 	public static FactionArgument all() {
 		return new FactionArgument(FactionType.ALL);
 	}
@@ -55,21 +60,20 @@ public class FactionArgument implements ArgumentType<String> {
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> cc, SuggestionsBuilder sb) {
 		if (!FactionType.NONE.equals(type)) {
-			if(cc.getSource() instanceof CommandSource) {
+			if (cc.getSource() instanceof CommandSource) {
 				CommandSource source = (CommandSource) cc.getSource();
 				FactionSavedData data = FactionSavedData.get(source.getServer());
 				return ISuggestionProvider.suggest(data.factions.entrySet().stream()
-						.filter((entry) -> 
-							FactionType.ALL.equals(type) || 
-							FactionType.HIDDEN.equals(type) && entry.getValue().hidden ||
-							FactionType.ACTIVE.equals(type) && !entry.getValue().hidden)
+						.filter((entry) -> FactionType.ALL.equals(type)
+								|| FactionType.HIDDEN.equals(type) && entry.getValue().hidden
+								|| FactionType.ACTIVE.equals(type) && !entry.getValue().hidden)
 						.map((entry) -> StringArgumentType.escapeIfRequired(entry.getKey())), sb);
 			} else if (cc.getSource() instanceof ISuggestionProvider) {
 				ISuggestionProvider isuggestionprovider = (ISuggestionProvider) cc.getSource();
 				return isuggestionprovider.getSuggestionsFromServer((CommandContext<ISuggestionProvider>) cc, sb);
 			}
 		}
-			
+
 		return Suggestions.empty();
 	}
 
@@ -79,6 +83,28 @@ public class FactionArgument implements ArgumentType<String> {
 	}
 
 	public enum FactionType {
-		NONE, ACTIVE, HIDDEN, ALL
+		NONE((byte) 0), ACTIVE((byte) 1), HIDDEN((byte) 2), ALL((byte) 3);
+
+		public byte value;
+
+		FactionType(byte i) {
+			this.value = i;
+		}
+	}
+
+	public static class Serializer implements IArgumentSerializer<FactionArgument> {
+		public void write(FactionArgument arg, PacketBuffer buffer) {
+			buffer.writeByte(arg.type.value);
+		}
+
+		public FactionArgument read(PacketBuffer buffer) {
+			byte b0 = buffer.readByte();
+			return new FactionArgument(b0 == 0 ? FactionType.NONE
+					: b0 == 1 ? FactionType.ACTIVE : b0 == 2 ? FactionType.HIDDEN : FactionType.ALL);
+		}
+
+		public void write(FactionArgument arg, JsonObject obj) {
+			obj.addProperty("type", arg.type.name());
+		}
 	}
 }
