@@ -35,7 +35,6 @@ public final class ModEnchants {
 	public static final RegistryObject<Enchantment> STORM = register("storm", StormEnchant::new);
 
 	public static final RegistryObject<Enchantment> REAPER = register("reaper", ReaperEnchant::new);
-	public static final RegistryObject<Enchantment> COMBINE = register("combine", CombineEnchant::new);
 
 	public static final RegistryObject<Enchantment> MOD_LOOTING = registerVanilla("looting", () -> new ModLootBonusEnchant(Rarity.RARE, ModEnchantHelper.ALL_WEAPONS, ModEnchantHelper.SLOT_HAND));
 	public static final RegistryObject<Enchantment> MOD_FORTUNE = registerVanilla("fortune", () -> new ModLootBonusEnchant(Rarity.RARE, EnchantmentType.DIGGER, ModEnchantHelper.SLOT_HAND));

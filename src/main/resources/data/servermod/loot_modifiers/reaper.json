@@ -1,14 +1,14 @@
 {
-  "type": "servermod:combine",
+  "type": "servermod:reaper",
   "conditions": [
     {
       "condition": "minecraft:match_tool",
       "predicate": {
         "enchantments": [
           {
-            "enchantment": "servermod:combine",
+            "enchantment": "servermod:reaper",
             "levels": {
-              "min": 1
+              "min": 2
             }
           }
         ]

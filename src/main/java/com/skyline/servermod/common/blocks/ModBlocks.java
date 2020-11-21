@@ -65,6 +65,7 @@ public final class ModBlocks {
 	}
 
 	public static final RegistryObject<Block> SHALE = register("shale", () -> new Block(Block.Properties.create(Material.ROCK)));
+	public static final RegistryObject<Block> EYE_BLOCK = register("eye_block", () -> new EyeBlock(Block.Properties.create(Material.CLAY)));
 	
 	public static final BlockSet COAL_SET = registerBlockSet(Blocks.COAL_BLOCK, Items.COAL, false);
 	public static final BlockSet IRON_SET = registerBlockSet(Blocks.IRON_BLOCK, Items.IRON_INGOT, false);

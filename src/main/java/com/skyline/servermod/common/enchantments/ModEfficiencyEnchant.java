@@ -10,6 +10,6 @@ public class ModEfficiencyEnchant extends EfficiencyEnchantment {
 
 	@Override
 	public int getMaxLevel() {
-		return 10;
+		return 20;
 	}
 }

@@ -11,5 +11,5 @@ public class ModLooters {
 	public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOTERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, ServerMod.MODID);
 
 	public static final RegistryObject<SmeltingEnchantLooter.Serializer> SMELTING_MODIFIER = LOOTERS.register("smelting", SmeltingEnchantLooter.Serializer::new);
-	public static final RegistryObject<CombineEnchantLooter.Serializer> COMBINE_MODIFIER = LOOTERS.register("combine", CombineEnchantLooter.Serializer::new);
+	public static final RegistryObject<ReaperEnchantLooter.Serializer> REAPER_MODIFIER = LOOTERS.register("reaper", ReaperEnchantLooter.Serializer::new);
 }

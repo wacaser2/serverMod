@@ -10,12 +10,12 @@ public class SmeltingEnchant extends Enchantment {
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 15;
+		return 24;
 	}
 
 	@Override
 	public int getMaxEnchantability(int enchantmentLevel) {
-		return super.getMinEnchantability(enchantmentLevel) + 50;
+		return 128;
 	}
 
 	@Override

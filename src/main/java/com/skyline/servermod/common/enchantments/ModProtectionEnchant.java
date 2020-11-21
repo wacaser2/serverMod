@@ -8,18 +8,14 @@ import net.minecraft.util.DamageSource;
 public class ModProtectionEnchant extends Enchantment {
 	public final ModProtectionEnchant.Type protectionType;
 
-	public ModProtectionEnchant(Enchantment.Rarity rarityIn, ModProtectionEnchant.Type protectionTypeIn,
-			EquipmentSlotType... slots) {
-		super(rarityIn,
-				protectionTypeIn == ModProtectionEnchant.Type.FALL ? EnchantmentType.ARMOR_FEET : EnchantmentType.ARMOR,
-				slots);
+	public ModProtectionEnchant(Enchantment.Rarity rarityIn, ModProtectionEnchant.Type protectionTypeIn, EquipmentSlotType... slots) {
+		super(rarityIn, protectionTypeIn == ModProtectionEnchant.Type.FALL ? EnchantmentType.ARMOR_FEET : EnchantmentType.ARMOR, slots);
 		this.protectionType = protectionTypeIn;
 	}
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return this.protectionType.getMinimalEnchantability()
-				+ (enchantmentLevel - 1) * this.protectionType.getEnchantIncreasePerLevel();
+		return this.protectionType.getMinimalEnchantability() + (enchantmentLevel - 1) * this.protectionType.getEnchantIncreasePerLevel();
 	}
 
 	@Override
@@ -28,9 +24,7 @@ public class ModProtectionEnchant extends Enchantment {
 	}
 
 	@Override
-	public int getMaxLevel() {
-		return 10;
-	}
+	public int getMaxLevel() { return 20; }
 
 	@Override
 	public int calcModifierDamage(int level, DamageSource source) {
@@ -56,8 +50,7 @@ public class ModProtectionEnchant extends Enchantment {
 			if (this.protectionType == protectionenchantment.protectionType) {
 				return false;
 			} else {
-				return this.protectionType == ModProtectionEnchant.Type.FALL
-						|| protectionenchantment.protectionType == ModProtectionEnchant.Type.FALL;
+				return this.protectionType == ModProtectionEnchant.Type.FALL || protectionenchantment.protectionType == ModProtectionEnchant.Type.FALL;
 			}
 		} else {
 			return super.canApplyTogether(ench);
@@ -65,26 +58,21 @@ public class ModProtectionEnchant extends Enchantment {
 	}
 
 	public static enum Type {
-		ALL("all", 1, 11), FIRE("fire", 10, 8), FALL("fall", 5, 6), EXPLOSION("explosion", 5, 8),
-		PROJECTILE("projectile", 3, 6);
+		ALL("all", 1, 11), FIRE("fire", 10, 8), FALL("fall", 5, 6), EXPLOSION("explosion", 5, 8), PROJECTILE("projectile", 3, 6);
 
 		@SuppressWarnings("unused")
 		private final String typeName;
 		private final int minEnchantability;
 		private final int levelCost;
 
-		private Type(String p_i48839_3_, int p_i48839_4_, int p_i48839_5_) {
-			this.typeName = p_i48839_3_;
-			this.minEnchantability = p_i48839_4_;
-			this.levelCost = p_i48839_5_;
+		private Type(String typeName, int minEnchant, int lvlCost) {
+			this.typeName = typeName;
+			this.minEnchantability = minEnchant;
+			this.levelCost = lvlCost;
 		}
 
-		public int getMinimalEnchantability() {
-			return this.minEnchantability;
-		}
+		public int getMinimalEnchantability() { return this.minEnchantability; }
 
-		public int getEnchantIncreasePerLevel() {
-			return this.levelCost;
-		}
+		public int getEnchantIncreasePerLevel() { return this.levelCost; }
 	}
 }

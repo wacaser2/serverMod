@@ -9,6 +9,7 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.ShieldItem;
 
 public final class ModEnchantHelper {
+	public static final EnchantmentType ALL = EnchantmentType.create("ALL", i -> true);
 	public static final EnchantmentType AXE = EnchantmentType.create("AXE", i -> i instanceof AxeItem);
 	public static final EnchantmentType HOE = EnchantmentType.create("HOE", i -> i instanceof HoeItem);
 	public static final EnchantmentType HAMMER = EnchantmentType.create("HAMMER", i -> i instanceof HammerItem);

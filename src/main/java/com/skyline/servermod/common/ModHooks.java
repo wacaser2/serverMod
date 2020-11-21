@@ -90,8 +90,14 @@ public class ModHooks {
 		return removed;
 	}
 
-	public static class BlastingEvent extends BreakEvent {
+	public static class BlastingEvent extends TopplingEvent {
 		public BlastingEvent(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+			super(world, pos, state, player);
+		}
+	}
+
+	public static class TopplingEvent extends BreakEvent {
+		public TopplingEvent(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 			super(world, pos, state, player);
 		}
 	}

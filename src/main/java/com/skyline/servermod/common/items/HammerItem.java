@@ -119,11 +119,11 @@ public class HammerItem extends Item implements IVanishable {
 
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		if (!worldIn.isRemote()) {
-			th = worldIn.isThundering();
-			rh = worldIn.isRaining();
-			pn = worldIn.canBlockSeeSky(new BlockPos(playerIn.getPositionVec()));
+		th = worldIn.isThundering();
+		rh = worldIn.isRaining();
+		pn = worldIn.canBlockSeeSky(new BlockPos(playerIn.getPositionVec()));
 
+		if (!worldIn.isRemote()) {
 			if (isCharged(stack) || canThunder(stack) || canTempest(stack) || canStorm(stack)) {
 				playerIn.setActiveHand(handIn);
 				return ActionResult.resultConsume(stack);

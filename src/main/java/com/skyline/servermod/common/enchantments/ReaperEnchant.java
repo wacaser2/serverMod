@@ -16,24 +16,24 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public class ReaperEnchant extends Enchantment {
 	public ReaperEnchant() {
-		super(Enchantment.Rarity.VERY_RARE, ModEnchantHelper.HOE, ModEnchantHelper.SLOT_HAND);
+		super(Enchantment.Rarity.RARE, ModEnchantHelper.HOE, ModEnchantHelper.SLOT_HAND);
 	}
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 30;
+		return 16 * enchantmentLevel;
 	}
 
 	@Override
 	public int getMaxEnchantability(int enchantmentLevel) {
-		return super.getMinEnchantability(enchantmentLevel) + 50;
+		return super.getMinEnchantability(enchantmentLevel) + 64;
 	}
 
 	@Override
-	public int getMaxLevel() { return 1; }
+	public int getMaxLevel() { return 2; }
 
 	@Override
-	public boolean isTreasureEnchantment() { return true; }
+	public boolean isTreasureEnchantment() { return false; }
 
 	@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class EventHandlers {

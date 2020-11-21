@@ -21,24 +21,24 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public class BlastingEnchant extends Enchantment {
 	public BlastingEnchant() {
-		super(Enchantment.Rarity.RARE, EnchantmentType.DIGGER, ModEnchantHelper.SLOT_HAND);
+		super(Enchantment.Rarity.VERY_RARE, EnchantmentType.DIGGER, ModEnchantHelper.SLOT_HAND);
 	}
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 1 + 10 * (enchantmentLevel - 1);
+		return 16 + 16 * enchantmentLevel;
 	}
 
 	@Override
 	public int getMaxEnchantability(int enchantmentLevel) {
-		return super.getMinEnchantability(enchantmentLevel) + 50;
+		return super.getMinEnchantability(enchantmentLevel) + 64;
 	}
 
 	@Override
-	public int getMaxLevel() { return 5; }
+	public int getMaxLevel() { return 20; }
 
 	public boolean func_230309_h_() {
-		return false;
+		return true;
 	}
 
 	@EventBusSubscriber(modid = ServerMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -54,6 +54,12 @@ public class BlastingEnchant extends Enchantment {
 				new Vector3i(0, 0, 2), new Vector3i(0, 1, 2), new Vector3i(0, -1, 2), new Vector3i(1, 0, 2), new Vector3i(-1, 0, 2), new Vector3i(0, 0, -2), new Vector3i(0, 1, -2), new Vector3i(0, -1, -2), new Vector3i(1, 0, -2), new Vector3i(-1, 0, -2), new Vector3i(0, 2, 0), new Vector3i(0, 2, 1), new Vector3i(0, 2, -1), new Vector3i(1, 2, 0), new Vector3i(-1, 2, 0), new Vector3i(0, -2, 0), new Vector3i(0, -2, 1), new Vector3i(0, -2, -1), new Vector3i(1, -2, 0), new Vector3i(-1, -2, 0), new Vector3i(2, 0, 0), new Vector3i(2, 0, 1), new Vector3i(2, 0, -1), new Vector3i(2, 1, 0), new Vector3i(2, -1, 0), new Vector3i(-2, 0, 0), new Vector3i(-2, 0, 1), new Vector3i(-2, 0, -1), new Vector3i(-2, 1, 0), new Vector3i(-2, -1, 0)
 			}, {
 				new Vector3i(1, 1, 2), new Vector3i(1, -1, 2), new Vector3i(-1, 1, 2), new Vector3i(-1, -1, 2), new Vector3i(1, 1, -2), new Vector3i(1, -1, -2), new Vector3i(-1, 1, -2), new Vector3i(-1, -1, -2), new Vector3i(1, 2, 1), new Vector3i(1, 2, -1), new Vector3i(-1, 2, 1), new Vector3i(-1, 2, -1), new Vector3i(1, -2, 1), new Vector3i(1, -2, -1), new Vector3i(-1, -2, 1), new Vector3i(-1, -2, -1), new Vector3i(2, 1, 1), new Vector3i(2, 1, -1), new Vector3i(2, -1, 1), new Vector3i(2, -1, -1), new Vector3i(-2, 1, 1), new Vector3i(-2, 1, -1), new Vector3i(-2, -1, 1), new Vector3i(-2, -1, -1)
+			}, {
+				new Vector3i(2, 0, 2), new Vector3i(2, 0, -2), new Vector3i(-2, 0, 2), new Vector3i(-2, 0, -2), new Vector3i(2, 2, 0), new Vector3i(2, -2, 0), new Vector3i(-2, 2, 0), new Vector3i(-2, -2, 0), new Vector3i(0, 2, 2), new Vector3i(0, 2, -2), new Vector3i(0, -2, 2), new Vector3i(0, -2, -2)
+			}, {
+				new Vector3i(2, 1, 2), new Vector3i(2, 1, -2), new Vector3i(-2, 1, 2), new Vector3i(-2, 1, -2), new Vector3i(2, 2, 1), new Vector3i(2, -2, 1), new Vector3i(-2, 2, 1), new Vector3i(-2, -2, 1), new Vector3i(1, 2, 2), new Vector3i(1, 2, -2), new Vector3i(1, -2, 2), new Vector3i(1, -2, -2), new Vector3i(2, -1, 2), new Vector3i(2, -1, -2), new Vector3i(-2, -1, 2), new Vector3i(-2, -1, -2), new Vector3i(2, 2, -1), new Vector3i(2, -2, -1), new Vector3i(-2, 2, -1), new Vector3i(-2, -2, -1), new Vector3i(-1, 2, 2), new Vector3i(-1, 2, -2), new Vector3i(-1, -2, 2), new Vector3i(-1, -2, -2)
+			}, {
+				new Vector3i(2, 2, 2), new Vector3i(2, 2, -2), new Vector3i(-2, 2, 2), new Vector3i(-2, 2, -2), new Vector3i(2, -2, 2), new Vector3i(2, -2, -2), new Vector3i(-2, -2, 2), new Vector3i(-2, -2, -2)
 			}
 		};
 

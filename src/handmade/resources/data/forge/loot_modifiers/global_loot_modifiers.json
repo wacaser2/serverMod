@@ -2,6 +2,6 @@
   "replace": false,
   "entries": [
     "servermod:smelting",
-    "servermod:combine"
+    "servermod:reaper"
   ]
 }

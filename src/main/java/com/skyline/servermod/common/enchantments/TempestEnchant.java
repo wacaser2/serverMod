@@ -9,16 +9,16 @@ public class TempestEnchant extends Enchantment {
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 30;
+		return 64 * enchantmentLevel;
 	}
 
 	@Override
 	public int getMaxEnchantability(int enchantmentLevel) {
-		return super.getMinEnchantability(enchantmentLevel) + 50;
+		return super.getMinEnchantability(enchantmentLevel) + 128;
 	}
 
 	@Override
-	public int getMaxLevel() { return 3; }
+	public int getMaxLevel() { return 5; }
 
 	@Override
 	public boolean isTreasureEnchantment() { return false; }

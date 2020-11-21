@@ -10,6 +10,6 @@ public class ModUnbreakingEnchant extends UnbreakingEnchantment {
 
 	@Override
 	public int getMaxLevel() {
-		return 10;
+		return 20;
 	}
 }

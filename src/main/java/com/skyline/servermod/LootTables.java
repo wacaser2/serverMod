@@ -47,6 +47,7 @@ public class LootTables extends LootTableProvider {
 		@Override
 		protected void addTables() {
 			registerDropSelfLootTable(ModBlocks.SHALE.get());
+			registerDropSelfLootTable(ModBlocks.EYE_BLOCK.get());
 			
 			for (BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 				addBlockSet(blockSet);
@@ -56,7 +57,7 @@ public class LootTables extends LootTableProvider {
 		@Override
 		protected Iterable<Block> getKnownBlocks() {
 			return () -> Stream.concat(
-				Stream.of(ModBlocks.SHALE.get()), 
+				Stream.of(ModBlocks.SHALE.get(), ModBlocks.EYE_BLOCK.get()), 
 				ModBlocks.VARIANT_SETS.stream().flatMap(bs -> bs.variants.stream()).map(v -> v.get())
 			).iterator();
 		}

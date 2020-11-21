@@ -74,6 +74,8 @@ public class Recipes extends RecipeProvider implements IConditionBuilder {
 		replace(Items.COAL, ItemTags.COALS);
 
 		registerRecipe(consumer, BiRecipe.build(Items.FLINT, ModBlocks.SHALE.get(), Pattern.INGOT, Pattern.BLOCK));
+		registerRecipe(consumer, BiRecipe.build(Items.ENDER_PEARL, ModBlocks.EYE_BLOCK.get(), Pattern.INGOT, Pattern.BLOCK));
+
 		registerRecipe(consumer, BiRecipe.build(Items.PAPER, ModItems.REAM.get(), Pattern.INGOT, Pattern.BLOCK));
 		registerRecipe(consumer, BiRecipe.build(Items.CARROT, ModItems.CARROT_BUSHEL.get(), Pattern.INGOT, Pattern.BLOCK));
 		registerRecipe(consumer, BiRecipe.build(Items.POTATO, ModItems.POTATO_BUSHEL.get(), Pattern.INGOT, Pattern.BLOCK));

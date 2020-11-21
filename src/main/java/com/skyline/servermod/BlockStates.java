@@ -21,6 +21,7 @@ public class BlockStates extends BlockStateProvider {
 	@Override
 	protected void registerStatesAndModels() {
 		addSimpleBlock(ModBlocks.SHALE);
+		addSimpleBlock(ModBlocks.EYE_BLOCK);
 		
 		for(BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 			registerBlockSet(blockSet);

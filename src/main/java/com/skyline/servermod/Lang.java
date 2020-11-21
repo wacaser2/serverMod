@@ -17,6 +17,7 @@ public class Lang extends LanguageProvider {
 	@Override
 	protected void addTranslations() {
 		add(ModBlocks.SHALE.get(), "Shale Block");
+		add(ModBlocks.EYE_BLOCK.get(), "Eye Block");
 
 		for (BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 			addBlockSet(blockSet);
@@ -45,7 +46,6 @@ public class Lang extends LanguageProvider {
 		add(ModEnchants.THUNDER.get(), "Thunder");
 		add(ModEnchants.TEMPEST.get(), "Tempest");
 		add(ModEnchants.STORM.get(), "Storm");
-		add(ModEnchants.COMBINE.get(), "Combine");
 		add(ModEnchants.REAPER.get(), "Reaper");
 		add(ModEnchants.TOPPLING.get(), "Toppling");
 
