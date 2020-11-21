@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -89,7 +88,8 @@ public class ServerMod {
 			int ret = 0;
 			if (i > 0) {
 				int power = event.getPower();
-				int j = (event.getOriginalLevel() * power) / Math.min(15, power);
+				int j2 = 1 + (power >> 1);
+				int j = rand.nextInt(j2) + j2 + rand.nextInt(power + 1);
 				int enchantNum = event.getEnchantRow();
 				if (enchantNum == 0) {
 					ret = Math.max(j / 3, 1);
@@ -130,16 +130,18 @@ public class ServerMod {
 						world.setBlockState(pos, sapling.getPlant(world, pos), 3);
 					}
 				} else if (Items.EGG == item) {
-					if (rand.nextInt(8) == 0) {
-						int i = 1;
-						if (rand.nextInt(32) == 0) {
-							i = 4;
-						}
-						for (int j = 0; j < i; ++j) {
-							ChickenEntity chickenentity = EntityType.CHICKEN.create(world);
-							chickenentity.setGrowingAge(-24000);
-							chickenentity.setLocationAndAngles(entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ(), entityItem.rotationYaw, 0.0F);
-							world.addEntity(chickenentity);
+					for (int k = 0; k < entityItem.getItem().getCount(); k++) {
+						if (rand.nextInt(8) == 0) {
+							int i = 1;
+							if (rand.nextInt(32) == 0) {
+								i = 4;
+							}
+							for (int j = 0; j < i; ++j) {
+								ChickenEntity chickenentity = EntityType.CHICKEN.create(world);
+								chickenentity.setGrowingAge(-24000);
+								chickenentity.setLocationAndAngles(entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ(), entityItem.rotationYaw, 0.0F);
+								world.addEntity(chickenentity);
+							}
 						}
 					}
 				}
@@ -150,6 +152,7 @@ public class ServerMod {
 		public static void onVillagerTrades(@Nonnull final VillagerTradesEvent event) {
 			if (VillagerProfession.LIBRARIAN.equals(event.getType())) {
 				Map<Integer, List<ITrade>> trades = event.getTrades();
+				trades.get(5).add(new ModBookTrade(20, 5));
 				trades.forEach((key, value) -> {
 					trades.put(key, value.stream().map(trade -> {
 						MerchantOffer offer = trade.getOffer(null, rand);
@@ -158,9 +161,6 @@ public class ServerMod {
 						}
 						return trade;
 					}).collect(Collectors.toList()));
-					if (key == 5) {
-						value.add(new ModBookTrade(20, 5));
-					}
 				});
 			} else if (VillagerProfession.ARMORER.equals(event.getType()) || VillagerProfession.FLETCHER.equals(event.getType()) || VillagerProfession.TOOLSMITH.equals(event.getType()) || VillagerProfession.WEAPONSMITH.equals(event.getType())) {
 				Map<Integer, List<ITrade>> trades = event.getTrades();
@@ -169,9 +169,6 @@ public class ServerMod {
 						MerchantOffer offer = trade.getOffer(null, rand);
 						return offer.getSellingStack().isEnchanted() ? new ModEnchantedItemTrade(offer, key) : trade;
 					}).collect(Collectors.toList()));
-					if (key == 5) {
-						value.add(new ModBookTrade(20, 5));
-					}
 				});
 			}
 		}
@@ -189,7 +186,7 @@ public class ServerMod {
 		public MerchantOffer getOffer(Entity trader, Random rand) {
 			int enchantLvl = ((lvl - 1) << 4) + rand.nextInt(32);
 			ItemStack stack = EnchantmentHelper.addRandomEnchantment(rand, new ItemStack(offer.getSellingStack().getItem()), enchantLvl, true);
-			return new MerchantOffer(getCurrency(enchantLvl + rand.nextInt(3 * enchantLvl)), offer.getBuyingStackSecond(), stack, offer.func_222214_i(), offer.getGivenExp(), offer.getPriceMultiplier());
+			return new MerchantOffer(getCurrency(enchantLvl + rand.nextInt(enchantLvl)), offer.getBuyingStackSecond(), stack, offer.func_222214_i(), offer.getGivenExp(), offer.getPriceMultiplier());
 		}
 	}
 
@@ -204,13 +201,8 @@ public class ServerMod {
 
 		public MerchantOffer getOffer(Entity trader, Random rand) {
 			int enchantLvl = ((lvl - 1) << 4) + rand.nextInt(32);
-			List<EnchantmentData> list = EnchantmentHelper.buildEnchantmentList(rand, Items.BOOK.getDefaultInstance(), enchantLvl, true);
-			ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-			list.forEach(ench -> EnchantedBookItem.addEnchantment(book, ench));
-			int minCost = enchantLvl;
-			int j = minCost + rand.nextInt(3 * enchantLvl);
-
-			return new MerchantOffer(getCurrency(j), new ItemStack(Items.BOOK), book, 12, this.xpValue, 0.2F);
+			ItemStack book = EnchantmentHelper.addRandomEnchantment(rand, new ItemStack(Items.BOOK), enchantLvl, true);
+			return new MerchantOffer(getCurrency(enchantLvl + rand.nextInt(enchantLvl)), new ItemStack(Items.BOOK), book, 12, this.xpValue, 0.2F);
 		}
 	}
 
@@ -259,6 +251,9 @@ public class ServerMod {
 			setupBlockSetRenderType(ModBlocks.YELLOW_STAINED_GLASS_SET, RenderType.getTranslucent());
 
 			setupBlockSetRenderType(ModBlocks.ICE_SET, RenderType.getTranslucent());
+
+			RenderTypeLookup.setRenderLayer(ModBlocks.TEMPERED_GLASS.get(), RenderType.getTranslucent());
+			RenderTypeLookup.setRenderLayer(ModBlocks.CRYSTAL_GLASS.get(), RenderType.getTranslucent());
 		}
 
 		private static void setupBlockSetRenderType(BlockSet bs, RenderType type) {

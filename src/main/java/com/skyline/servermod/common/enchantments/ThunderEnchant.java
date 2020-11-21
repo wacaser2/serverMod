@@ -18,7 +18,7 @@ public class ThunderEnchant extends Enchantment {
 	}
 
 	@Override
-	public int getMaxLevel() { return 20; }
+	public int getMaxLevel() { return 50; }
 
 	@Override
 	public boolean isTreasureEnchantment() { return false; }

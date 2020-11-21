@@ -75,6 +75,9 @@ public class Recipes extends RecipeProvider implements IConditionBuilder {
 
 		registerRecipe(consumer, BiRecipe.build(Items.FLINT, ModBlocks.SHALE.get(), Pattern.INGOT, Pattern.BLOCK));
 		registerRecipe(consumer, BiRecipe.build(Items.ENDER_PEARL, ModBlocks.EYE_BLOCK.get(), Pattern.INGOT, Pattern.BLOCK));
+		registerRecipe(consumer, BiRecipe.build(ModItems.RUBY.get(), ModBlocks.RUBY_BLOCK.get(), Pattern.INGOT, Pattern.BLOCK));
+		registerRecipe(consumer, BiRecipe.build(Blocks.GLASS, ModBlocks.TEMPERED_GLASS.get(), Pattern.INGOT, Pattern.BLOCK));
+		registerRecipe(consumer, BiRecipe.build(ModBlocks.TEMPERED_GLASS.get(), ModBlocks.CRYSTAL_GLASS.get(), Pattern.INGOT, Pattern.BLOCK));
 
 		registerRecipe(consumer, BiRecipe.build(Items.PAPER, ModItems.REAM.get(), Pattern.INGOT, Pattern.BLOCK));
 		registerRecipe(consumer, BiRecipe.build(Items.CARROT, ModItems.CARROT_BUSHEL.get(), Pattern.INGOT, Pattern.BLOCK));

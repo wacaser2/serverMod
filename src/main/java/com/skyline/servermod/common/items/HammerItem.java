@@ -230,7 +230,7 @@ public class HammerItem extends Item implements IVanishable {
 	}
 
 	public static int getChargeTime(ItemStack stack) {
-		return 100 - 10 * thunderPower(stack);
+		return 50;// - 10 * thunderPower(stack);
 	}
 
 	public static int getStormTime(ItemStack stack) {

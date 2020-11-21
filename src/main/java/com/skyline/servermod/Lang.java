@@ -18,6 +18,9 @@ public class Lang extends LanguageProvider {
 	protected void addTranslations() {
 		add(ModBlocks.SHALE.get(), "Shale Block");
 		add(ModBlocks.EYE_BLOCK.get(), "Eye Block");
+		add(ModBlocks.RUBY_BLOCK.get(), "Ruby Block");
+		add(ModBlocks.TEMPERED_GLASS.get(), "Tempered Glass");
+		add(ModBlocks.CRYSTAL_GLASS.get(), "Crystal Glass");
 
 		for (BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 			addBlockSet(blockSet);
@@ -61,6 +64,51 @@ public class Lang extends LanguageProvider {
 		add("commands.faction.unhide", "Successfully revived %s");
 		add("commands.faction.clear", "Permanently deleted %s");
 		add("argument.faction.invalid", "Faction name: %s is invalid");
+
+		add("enchantment.level.11", "XI");
+		add("enchantment.level.12", "XII");
+		add("enchantment.level.13", "XIII");
+		add("enchantment.level.14", "XIV");
+		add("enchantment.level.15", "XV");
+		add("enchantment.level.16", "XVI");
+		add("enchantment.level.17", "XVII");
+		add("enchantment.level.18", "XVIII");
+		add("enchantment.level.19", "XIX");
+
+		add("enchantment.level.20", "XX");
+		add("enchantment.level.21", "XXI");
+		add("enchantment.level.22", "XXII");
+		add("enchantment.level.23", "XXIII");
+		add("enchantment.level.24", "XXIV");
+		add("enchantment.level.25", "XXV");
+		add("enchantment.level.26", "XXVI");
+		add("enchantment.level.27", "XXVII");
+		add("enchantment.level.28", "XXVIII");
+		add("enchantment.level.29", "XXIX");
+
+		add("enchantment.level.30", "XXX");
+		add("enchantment.level.31", "XXXI");
+		add("enchantment.level.32", "XXXII");
+		add("enchantment.level.33", "XXXIII");
+		add("enchantment.level.34", "XXXIV");
+		add("enchantment.level.35", "XXXV");
+		add("enchantment.level.36", "XXXVI");
+		add("enchantment.level.37", "XXXVII");
+		add("enchantment.level.38", "XXXVIII");
+		add("enchantment.level.39", "XXXIX");
+
+		add("enchantment.level.40", "XL");
+		add("enchantment.level.41", "XLI");
+		add("enchantment.level.42", "XLII");
+		add("enchantment.level.43", "XLIII");
+		add("enchantment.level.44", "XLIV");
+		add("enchantment.level.45", "XLV");
+		add("enchantment.level.46", "XLVI");
+		add("enchantment.level.47", "XLVII");
+		add("enchantment.level.48", "XLVIII");
+		add("enchantment.level.49", "XLIX");
+
+		add("enchantment.level.50", "L");
 	}
 
 	private void addBlockSet(BlockSet blockSet) {

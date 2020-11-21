@@ -44,9 +44,9 @@ public class ModHooks {
 	/**
 	 * Attempts to harvest a block
 	 */
-	public static boolean tryHarvestBlock(World world, ServerPlayerEntity entityPlayer, BlockPos pos) {
+	public static boolean tryHarvestBlock(World world, ServerPlayerEntity entityPlayer, BlockPos pos, BlastingEvent.BreakType type) {
 		BlockState blockstate = world.getBlockState(pos);
-		int exp = onBlastingEvent(world, entityPlayer, pos);
+		int exp = onBlastingEvent(world, entityPlayer, pos, type);
 		if (exp == -1) {
 			return false;
 		} else {
@@ -90,19 +90,20 @@ public class ModHooks {
 		return removed;
 	}
 
-	public static class BlastingEvent extends TopplingEvent {
-		public BlastingEvent(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public static class BlastingEvent extends BreakEvent {
+		public BreakType type;
+
+		public BlastingEvent(World world, BlockPos pos, BlockState state, PlayerEntity player, BreakType type) {
 			super(world, pos, state, player);
+			this.type = type;
+		}
+
+		public static enum BreakType {
+			BLASTING, TOPPLING
 		}
 	}
 
-	public static class TopplingEvent extends BreakEvent {
-		public TopplingEvent(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-			super(world, pos, state, player);
-		}
-	}
-
-	public static int onBlastingEvent(World world, ServerPlayerEntity entityPlayer, BlockPos pos) {
+	public static int onBlastingEvent(World world, ServerPlayerEntity entityPlayer, BlockPos pos, BlastingEvent.BreakType type) {
 		// Logic from tryHarvestBlock for pre-canceling the event
 		boolean preCancelEvent = false;
 		ItemStack itemstack = entityPlayer.getHeldItemMainhand();
@@ -116,7 +117,7 @@ public class ModHooks {
 
 		// Post the block break event
 		BlockState state = world.getBlockState(pos);
-		BlastingEvent event = new BlastingEvent(world, pos, state, entityPlayer);
+		BreakEvent event = new BlastingEvent(world, pos, state, entityPlayer, type);
 		event.setCanceled(preCancelEvent);
 		MinecraftForge.EVENT_BUS.post(event);
 

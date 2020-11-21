@@ -24,7 +24,7 @@ public class ModProtectionEnchant extends Enchantment {
 	}
 
 	@Override
-	public int getMaxLevel() { return 20; }
+	public int getMaxLevel() { return 50; }
 
 	@Override
 	public int calcModifierDamage(int level, DamageSource source) {

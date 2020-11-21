@@ -22,6 +22,9 @@ public class BlockStates extends BlockStateProvider {
 	protected void registerStatesAndModels() {
 		addSimpleBlock(ModBlocks.SHALE);
 		addSimpleBlock(ModBlocks.EYE_BLOCK);
+		addSimpleBlock(ModBlocks.RUBY_BLOCK);
+		addSimpleBlock(ModBlocks.TEMPERED_GLASS);
+		addSimpleBlock(ModBlocks.CRYSTAL_GLASS);
 		
 		for(BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 			registerBlockSet(blockSet);

@@ -11,6 +11,6 @@ public class ModLootBonusEnchant extends LootBonusEnchantment {
 
 	@Override
 	public int getMaxLevel() {
-		return 20;
+		return 50;
 	}
 }

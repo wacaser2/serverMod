@@ -13,7 +13,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.WallBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -24,49 +23,56 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public final class ModBlocks {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ServerMod.MODID);
-	
+
 	public static List<BlockSet> VARIANT_SETS = new ArrayList<BlockSet>();
-	
+
 	public static class BlockSet {
 		public Block baseBlock;
 		public Item ingot;
 		public List<RegistryObject<Block>> variants;
-		
+
 		public BlockSet(Block baseBlock, Item ingot, boolean toClear) {
 			this.baseBlock = baseBlock;
 			this.ingot = ingot;
 			this.variants = addVariants(baseBlock, toClear);
 		}
-		
+
 		public static List<RegistryObject<Block>> addVariants(final Block base, boolean toClear) {
 			String baseName = base.getRegistryName().getPath().replace("_block", "");
-			
-			AbstractBlock.Properties props = toClear? Block.Properties.from(base).notSolid():Block.Properties.from(base);
+
+			AbstractBlock.Properties props = toClear ? Block.Properties.from(base).notSolid() : Block.Properties.from(base);
 
 			List<RegistryObject<Block>> blockSet = new ArrayList<RegistryObject<Block>>();
 			blockSet.add(register(baseName + "_stairs", () -> new StairsBlock(() -> base.getDefaultState(), props)));
 			blockSet.add(register(baseName + "_slab", () -> new SlabBlock(props)));
 			blockSet.add(register(baseName + "_wall", () -> new WallBlock(props)));
-			
+
 			return blockSet;
 		}
 	}
-	
+
 	public static RegistryObject<Block> register(final String name, final Supplier<? extends Block> supplier) {
 		RegistryObject<Block> block = BLOCKS.register(name, supplier);
 		ModItems.register(name, () -> new BlockItem(block.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 		return block;
 	}
-	
+
 	public static BlockSet registerBlockSet(Block baseBlock, Item ingot, boolean toClear) {
 		BlockSet bs = new BlockSet(baseBlock, ingot, toClear);
 		VARIANT_SETS.add(bs);
 		return bs;
 	}
 
-	public static final RegistryObject<Block> SHALE = register("shale", () -> new Block(Block.Properties.create(Material.ROCK)));
-	public static final RegistryObject<Block> EYE_BLOCK = register("eye_block", () -> new EyeBlock(Block.Properties.create(Material.CLAY)));
-	
+	public static final RegistryObject<Block> SHALE = register("shale", () -> new Block(Block.Properties.from(Blocks.BLACK_CONCRETE_POWDER)));
+	public static final RegistryObject<Block> EYE_BLOCK = register("eye_block", () -> new EyeBlock(Block.Properties.from(Blocks.BLACK_WOOL)));
+	public static final RegistryObject<Block> RUBY_BLOCK = register("ruby_block", () -> new Block(Block.Properties.from(Blocks.EMERALD_BLOCK)));
+	public static final RegistryObject<Block> TEMPERED_GLASS = register("tempered_glass", () -> new Block(Block.Properties.from(Blocks.GLASS).hardnessAndResistance(2.0F, 200.0F)));
+	public static final RegistryObject<Block> CRYSTAL_GLASS = register("crystal_glass", () -> new Block(Block.Properties.from(Blocks.GLASS).func_235838_a_((p_235460_0_) -> {
+		return 15;
+	}).hardnessAndResistance(5.0F, 1200.0F)));
+
+//	public static final BlockSet RUBY_SET = registerBlockSet(RUBY_BLOCK.get(), ModItems.RUBY.get(), false);
+
 	public static final BlockSet COAL_SET = registerBlockSet(Blocks.COAL_BLOCK, Items.COAL, false);
 	public static final BlockSet IRON_SET = registerBlockSet(Blocks.IRON_BLOCK, Items.IRON_INGOT, false);
 	public static final BlockSet GOLD_SET = registerBlockSet(Blocks.GOLD_BLOCK, Items.GOLD_INGOT, false);
