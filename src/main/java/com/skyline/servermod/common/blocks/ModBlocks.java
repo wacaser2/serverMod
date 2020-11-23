@@ -10,6 +10,7 @@ import com.skyline.servermod.common.items.ModItems;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.GlassBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.WallBlock;
@@ -66,12 +67,10 @@ public final class ModBlocks {
 	public static final RegistryObject<Block> SHALE = register("shale", () -> new Block(Block.Properties.from(Blocks.BLACK_CONCRETE_POWDER)));
 	public static final RegistryObject<Block> EYE_BLOCK = register("eye_block", () -> new EyeBlock(Block.Properties.from(Blocks.BLACK_WOOL)));
 	public static final RegistryObject<Block> RUBY_BLOCK = register("ruby_block", () -> new Block(Block.Properties.from(Blocks.EMERALD_BLOCK)));
-	public static final RegistryObject<Block> TEMPERED_GLASS = register("tempered_glass", () -> new Block(Block.Properties.from(Blocks.GLASS).hardnessAndResistance(2.0F, 200.0F)));
-	public static final RegistryObject<Block> CRYSTAL_GLASS = register("crystal_glass", () -> new Block(Block.Properties.from(Blocks.GLASS).func_235838_a_((p_235460_0_) -> {
+	public static final RegistryObject<Block> TEMPERED_GLASS = register("tempered_glass", () -> new GlassBlock(Block.Properties.from(Blocks.GLASS).hardnessAndResistance(2.0F, 200.0F)));
+	public static final RegistryObject<Block> CRYSTAL_GLASS = register("crystal_glass", () -> new GlassBlock(Block.Properties.from(Blocks.GLASS).func_235838_a_((p_235460_0_) -> {
 		return 15;
 	}).hardnessAndResistance(5.0F, 1200.0F)));
-
-//	public static final BlockSet RUBY_SET = registerBlockSet(RUBY_BLOCK.get(), ModItems.RUBY.get(), false);
 
 	public static final BlockSet COAL_SET = registerBlockSet(Blocks.COAL_BLOCK, Items.COAL, false);
 	public static final BlockSet IRON_SET = registerBlockSet(Blocks.IRON_BLOCK, Items.IRON_INGOT, false);

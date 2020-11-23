@@ -19,7 +19,7 @@ public class Tags extends BlockTagsProvider {
 		Builder<Block> slabs = func_240522_a_(BlockTags.makeWrapperTag("minecraft:slabs"));
 		Builder<Block> walls = func_240522_a_(BlockTags.makeWrapperTag("minecraft:walls"));
 		
-		for(BlockSet blockSet : ModBlocks.VARIANT_SETS) {
+		for (BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 			stairs = stairs.func_240532_a_(blockSet.variants.get(0).get());
 			slabs = slabs.func_240532_a_(blockSet.variants.get(1).get());
 			walls = walls.func_240532_a_(blockSet.variants.get(2).get());

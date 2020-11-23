@@ -25,34 +25,34 @@ public class BlockStates extends BlockStateProvider {
 		addSimpleBlock(ModBlocks.RUBY_BLOCK);
 		addSimpleBlock(ModBlocks.TEMPERED_GLASS);
 		addSimpleBlock(ModBlocks.CRYSTAL_GLASS);
-		
-		for(BlockSet blockSet : ModBlocks.VARIANT_SETS) {
+
+		for (BlockSet blockSet : ModBlocks.VARIANT_SETS) {
 			registerBlockSet(blockSet);
 		}
 	}
-	
+
 	private void addSimpleBlock(RegistryObject<Block> block) {
 		String name = block.get().getRegistryName().getPath();
 		simpleBlock(block.get(), models().cubeAll(name, modLoc("block/" + name)));
-		
+
 		addBlockItem(block);
 	}
-	
+
 	private void registerBlockSet(BlockSet blockSet) {
 		String baseName = blockSet.baseBlock.getRegistryName().getPath().replace("_block", "");
 		ResourceLocation baseLoc = blockSet.baseBlock.getRegistryName();
-		ResourceLocation tex = mcLoc("block/" + baseLoc.getPath());
+		ResourceLocation tex = new ResourceLocation(baseLoc.getNamespace(), "block/" + baseLoc.getPath());
 //
 		stairsBlock((StairsBlock) blockSet.variants.get(0).get(), baseName, tex);
 		slabBlock((SlabBlock) blockSet.variants.get(1).get(), baseLoc, tex);
 		wallBlock((WallBlock) blockSet.variants.get(2).get(), baseName, tex);
 		models().wallInventory(blockSet.variants.get(2).get().getRegistryName().getPath(), tex);
-		
+
 		addBlockItem(blockSet.variants.get(0));
 		addBlockItem(blockSet.variants.get(1));
 		addBlockItem(blockSet.variants.get(2));
 	}
-	
+
 	private void addBlockItem(RegistryObject<Block> variant) {
 		simpleBlockItem(variant.get(), models().getExistingFile(modLoc("block/" + variant.get().getRegistryName().getPath())));
 	}

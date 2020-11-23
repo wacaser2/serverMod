@@ -196,7 +196,7 @@ public class HammerItem extends Item implements IVanishable {
 	}
 
 	private boolean canThunder(ItemStack stack) {
-		return thunderPower(stack) > 0 && th && pn;
+		return thunderPower(stack) > 0 && rh && pn;
 	}
 
 	private boolean canTempest(ItemStack stack) {
