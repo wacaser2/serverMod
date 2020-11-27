@@ -4,9 +4,11 @@ import java.util.function.Supplier;
 
 import com.skyline.servermod.ServerMod;
 
+import net.minecraft.enchantment.DamageEnchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.enchantment.ImpalingEnchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,7 +32,7 @@ public final class ModEnchants {
 	public static final RegistryObject<Enchantment> TIMELESS = register("timeless", TimelessEnchant::new);
 	public static final RegistryObject<Enchantment> SOULBOUND = register("soulbound", SoulboundEnchant::new);
 
-	public static final RegistryObject<Enchantment> THUNDER = register("thunder", ThunderEnchant::new);
+	public static final RegistryObject<Enchantment> THUNDER = register("thunder", () -> new ModDamageEnchant(Enchantment.Rarity.UNCOMMON, ModDamageEnchant.Type.THUNDER, ModEnchantHelper.SLOT_HAND));
 	public static final RegistryObject<Enchantment> TEMPEST = register("tempest", TempestEnchant::new);
 	public static final RegistryObject<Enchantment> STORM = register("storm", StormEnchant::new);
 
@@ -47,4 +49,16 @@ public final class ModEnchants {
 
 	public static final RegistryObject<Enchantment> MOD_UNBREAKING = registerVanilla("unbreaking", () -> new ModUnbreakingEnchant(Rarity.UNCOMMON, ModEnchantHelper.SLOT_ALL));
 	public static final RegistryObject<Enchantment> MOD_EFFICIENCY = registerVanilla("efficiency", () -> new ModEfficiencyEnchant(Rarity.COMMON, ModEnchantHelper.SLOT_HAND));
-}
+
+	public static final RegistryObject<Enchantment> MOD_POWER = registerVanilla("power", () -> new ModDamageEnchant(Enchantment.Rarity.COMMON, ModDamageEnchant.Type.POWER, ModEnchantHelper.SLOT_HAND));
+	public static final RegistryObject<Enchantment> MOD_SMITE = registerVanilla("smite", () -> new ModDamageEnchant(Enchantment.Rarity.UNCOMMON, ModDamageEnchant.Type.SMITE, EquipmentSlotType.MAINHAND));
+	public static final RegistryObject<Enchantment> MOD_BANE_OF_ARTHROPODS = registerVanilla("bane_of_arthropods", () -> new ModDamageEnchant(Enchantment.Rarity.UNCOMMON, ModDamageEnchant.Type.BANE, EquipmentSlotType.MAINHAND));
+	public static final RegistryObject<Enchantment> MOD_IMPALING = registerVanilla("impaling", () -> new ModDamageEnchant(Enchantment.Rarity.RARE, ModDamageEnchant.Type.IMPALING, ModEnchantHelper.SLOT_HAND));
+	
+	public static final RegistryObject<Enchantment> MOD_FLAME = registerVanilla("flame", () -> new ModFlameEnchant(Enchantment.Rarity.RARE, ModEnchantHelper.ALL_WEAPONS, ModEnchantHelper.SLOT_HAND));
+	public static final RegistryObject<Enchantment> MOD_KNOCKBACK = registerVanilla("knockback", () -> new ModKnockbackEnchant(Enchantment.Rarity.UNCOMMON, ModEnchantHelper.MELEE_WEAPONS, ModEnchantHelper.SLOT_HAND));
+	
+	
+	public static final RegistryObject<Enchantment> MOD_SHARPNESS = registerVanilla("sharpness", DummyEnchant::new);
+	public static final RegistryObject<Enchantment> MOD_FIRE_ASPECT = registerVanilla("fire_aspect", DummyEnchant::new);
+	   }

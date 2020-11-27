@@ -95,7 +95,7 @@ public class HammerItem extends Item implements IVanishable {
 	}
 
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (!Material.GLASS.equals(state.getMaterial()) || (double) state.getBlockHardness(worldIn, pos) != 0.0D) {
+		if (!Material.GLASS.equals(state.getMaterial()) && (double) state.getBlockHardness(worldIn, pos) != 0.0D) {
 			stack.damageItem(2, entityLiving, (wielder) -> {
 				wielder.sendBreakAnimation(EquipmentSlotType.MAINHAND);
 			});
