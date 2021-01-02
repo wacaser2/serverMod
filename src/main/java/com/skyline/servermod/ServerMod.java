@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.skyline.servermod.common.blocks.ModBlocks;
 import com.skyline.servermod.common.blocks.ModBlocks.BlockSet;
 import com.skyline.servermod.common.commands.FactionArgument;
@@ -15,23 +17,18 @@ import com.skyline.servermod.common.enchantments.ModEnchants;
 import com.skyline.servermod.common.items.ModItems;
 import com.skyline.servermod.common.looters.ModLooters;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.DoorBlock;
-import net.minecraft.block.SaplingBlock;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.merchant.villager.VillagerTrades.ITrade;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,15 +37,15 @@ import net.minecraft.item.MerchantOffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -103,6 +100,120 @@ public class ServerMod {
 		}
 
 		@SubscribeEvent
+		public static void onAnvilUpdate(@Nonnull final AnvilUpdateEvent event) {
+			ItemStack left = event.getLeft();
+			ItemStack right = event.getRight();
+			ItemStack output = left.copy();
+			int cost = 0;
+
+			boolean bookEnchant = right.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(right).isEmpty();
+			if (output.isDamageable() && output.getItem().getIsRepairable(output, right)) {
+				int maxDurabilityToRepair = Math.min(output.getDamage(), output.getMaxDamage() / 4);
+				if (maxDurabilityToRepair <= 0) {
+					event.setOutput(ItemStack.EMPTY);
+					event.setCost(0);
+					return;
+				}
+
+				int maxRepairs;
+				for (maxRepairs = 0; maxDurabilityToRepair > 0 && maxRepairs < right.getCount(); ++maxRepairs) {
+					output.setDamage(output.getDamage() - maxDurabilityToRepair);
+					maxDurabilityToRepair = Math.min(output.getDamage(), output.getMaxDamage() / 4);
+					cost++;
+				}
+
+				event.setMaterialCost(maxRepairs);
+			} else {
+				if (!bookEnchant && (output.getItem() != right.getItem() || !output.isDamageable())) {
+					event.setOutput(ItemStack.EMPTY);
+					event.setCost(0);
+					return;
+				}
+
+				if (output.isDamageable() && !bookEnchant) {
+					int durability = output.getMaxDamage();
+					int durabilityLeft = 2 * durability - left.getDamage() - right.getDamage();
+					int durabilityAdd = 12 * durability / 100;
+					int durabilityResult = Math.min(durability, durabilityLeft + durabilityAdd);
+					output.setDamage(durability - durabilityResult);
+					cost += 2;
+				}
+
+				Map<Enchantment, Integer> mapLeft = EnchantmentHelper.getEnchantments(left);
+				Map<Enchantment, Integer> mapRight = EnchantmentHelper.getEnchantments(right);
+				Map<Enchantment, Integer> mapOutput = EnchantmentHelper.getEnchantments(output);
+
+				for (Enchantment enchant : mapRight.keySet()) {
+					if (enchant != null) {
+						int currLvl = mapLeft.getOrDefault(enchant, 0);
+						int addLvl = mapRight.getOrDefault(enchant, 0);
+
+						int newLvl = Math.max(currLvl, addLvl);
+						if (addLvl == currLvl) {
+							newLvl = Math.min(enchant.getMaxLevel(), newLvl + 1);
+						}
+
+						if (enchant.canApply(output)) {
+							boolean canEnchant = true;
+							for (Enchantment existing : mapLeft.keySet()) {
+								if (enchant != existing && !enchant.isCompatibleWith(existing)) {
+									canEnchant = false;
+									break;
+								}
+							}
+
+							if (canEnchant) {
+								mapOutput.put(enchant, newLvl);
+
+								int enchantMult = 1;
+								switch (enchant.getRarity()) {
+								case COMMON:
+									enchantMult = 1;
+									break;
+								case UNCOMMON:
+									enchantMult = 2;
+									break;
+								case RARE:
+									enchantMult = 4;
+									break;
+								case VERY_RARE:
+									enchantMult = 8;
+									break;
+								}
+
+								if (bookEnchant) {
+									enchantMult = Math.max(1, enchantMult / 2);
+								}
+
+								int enchantCost = enchantMult * (newLvl - currLvl);
+								cost += enchantCost;
+							}
+						}
+					}
+				}
+				EnchantmentHelper.setEnchantments(mapOutput, output);
+			}
+
+			if (StringUtils.isBlank(event.getName())) {
+				if (output.hasDisplayName()) {
+					cost++;
+					output.clearCustomName();
+				}
+			} else if (!event.getName().equals(output.getDisplayName().getString())) {
+				cost++;
+				output.setDisplayName(new StringTextComponent(event.getName()));
+			}
+			if (bookEnchant && !output.isBookEnchantable(right)) output = ItemStack.EMPTY;
+
+			if (cost <= 0) {
+				output = ItemStack.EMPTY;
+			}
+
+			event.setOutput(output);
+			event.setCost(cost);
+		}
+
+		@SubscribeEvent
 		@OnlyIn(Dist.CLIENT)
 		public static void onPlayerTick(@Nonnull final PlayerTickEvent event) {
 			if (event.player instanceof ClientPlayerEntity) {
@@ -116,37 +227,37 @@ public class ServerMod {
 			}
 		}
 
-		@SubscribeEvent
-		public static void onItemExpire(final ItemExpireEvent event) {
-			ItemEntity entityItem = event.getEntityItem();
-			Item item = entityItem.getItem().getItem();
-			World world = entityItem.world;
-			if (!world.isRemote) {
-				if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof SaplingBlock) {
-					SaplingBlock sapling = (SaplingBlock) ((BlockItem) item).getBlock();
-					BlockPos pos = new BlockPos(entityItem.getPositionVec());
-					BlockState state = world.getBlockState(pos);
-					if (sapling.isValidPosition(state, world, pos)) {
-						world.setBlockState(pos, sapling.getPlant(world, pos), 3);
-					}
-				} else if (Items.EGG == item) {
-					for (int k = 0; k < entityItem.getItem().getCount(); k++) {
-						if (rand.nextInt(8) == 0) {
-							int i = 1;
-							if (rand.nextInt(32) == 0) {
-								i = 4;
-							}
-							for (int j = 0; j < i; ++j) {
-								ChickenEntity chickenentity = EntityType.CHICKEN.create(world);
-								chickenentity.setGrowingAge(-24000);
-								chickenentity.setLocationAndAngles(entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ(), entityItem.rotationYaw, 0.0F);
-								world.addEntity(chickenentity);
-							}
-						}
-					}
-				}
-			}
-		}
+//		@SubscribeEvent
+//		public static void onItemExpire(final ItemExpireEvent event) {
+//			ItemEntity entityItem = event.getEntityItem();
+//			Item item = entityItem.getItem().getItem();
+//			World world = entityItem.world;
+//			if (!world.isRemote) {
+//				if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof SaplingBlock) {
+//					SaplingBlock sapling = (SaplingBlock) ((BlockItem) item).getBlock();
+//					BlockPos pos = new BlockPos(entityItem.getPositionVec());
+//					BlockState state = world.getBlockState(pos);
+//					if (sapling.isValidPosition(state, world, pos)) {
+//						world.setBlockState(pos, sapling.getPlant(world, pos), 3);
+//					}
+//				} else if (Items.EGG == item) {
+//					for (int k = 0; k < entityItem.getItem().getCount(); k++) {
+//						if (rand.nextInt(8) == 0) {
+//							int i = 1;
+//							if (rand.nextInt(32) == 0) {
+//								i = 4;
+//							}
+//							for (int j = 0; j < i; ++j) {
+//								ChickenEntity chickenentity = EntityType.CHICKEN.create(world);
+//								chickenentity.setGrowingAge(-24000);
+//								chickenentity.setLocationAndAngles(entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ(), entityItem.rotationYaw, 0.0F);
+//								world.addEntity(chickenentity);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 
 		@SubscribeEvent
 		public static void onVillagerTrades(@Nonnull final VillagerTradesEvent event) {
